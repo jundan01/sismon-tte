@@ -1,0 +1,430 @@
+﻿<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagram Alur Bisnis Sistem Monitoring TTE Kota Cirebon</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #ffffff;
+      color: #0f172a;
+      padding: 40px;
+      width: 2200px;
+      margin: 0 auto;
+    }
+
+    /* CARD WRAPPERS */
+    .export-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 36px;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .header-card {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border: 1.5px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 32px 40px;
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    }
+
+    .header-left h1 {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #0f172a;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-left p {
+      font-size: 16px;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .badge-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .badge {
+      background: #eff6ff;
+      border: 1px solid #93c5fd;
+      color: #1d4ed8;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge.green {
+      background: #f0fdf4;
+      border-color: #86efac;
+      color: #15803d;
+    }
+
+    .badge.purple {
+      background: #faf5ff;
+      border-color: #d8b4fe;
+      color: #7e22ce;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title span.tag {
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 6px 14px;
+      border-radius: 6px;
+    }
+
+    .diagram-container {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 36px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: visible;
+    }
+
+    .diagram-container svg {
+      max-width: 100% !important;
+      height: auto !important;
+      background-color: #ffffff !important;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+    }
+
+    .info-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-left: 5px solid #0284c7;
+      padding: 20px 24px;
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 18px;
+    }
+
+    .info-box:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-box h4 {
+      font-size: 16px;
+      color: #0369a1;
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+
+    .info-box p {
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 24px;
+      color: #64748b;
+      font-size: 14px;
+      font-weight: 600;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 20px;
+    }
+
+    /* Mermaid Clean SVG Theme Overrides */
+    .node rect, .node circle, .node ellipse, .node polygon, .node path {
+      fill: #f8fafc !important;
+      stroke: #2563eb !important;
+      stroke-width: 1.5px !important;
+    }
+    .cluster rect {
+      fill: #ffffff !important;
+      stroke: #94a3b8 !important;
+      stroke-width: 1.5px !important;
+    }
+    .node .label, .nodeLabel {
+      color: #0f172a !important;
+      fill: #0f172a !important;
+      font-weight: 600 !important;
+    }
+    .edgeLabel {
+      background-color: #ffffff !important;
+      color: #1e293b !important;
+      fill: #1e293b !important;
+      font-weight: 500 !important;
+    }
+    .edgePath .path {
+      stroke: #2563eb !important;
+      stroke-width: 2px !important;
+    }
+    .arrowheadPath {
+      fill: #2563eb !important;
+    }
+  </style>
+  <script src="mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      securityLevel: 'loose',
+      fontFamily: 'Plus Jakarta Sans',
+      themeVariables: {
+        darkMode: false,
+        background: '#ffffff',
+        mainBkg: '#f8fafc',
+        primaryColor: '#eff6ff',
+        primaryTextColor: '#0f172a',
+        primaryBorderColor: '#2563eb',
+        lineColor: '#2563eb',
+        secondaryColor: '#f0fdf4',
+        secondaryTextColor: '#064e3b',
+        secondaryBorderColor: '#16a34a',
+        tertiaryColor: '#faf5ff',
+        tertiaryTextColor: '#581c87',
+        tertiaryBorderColor: '#9333ea',
+        clusterBkg: '#ffffff',
+        clusterBorder: '#94a3b8',
+        titleColor: '#0f172a',
+        nodeBorder: '#2563eb',
+        actorBkg: '#ffffff',
+        actorBorder: '#2563eb',
+        actorTextColor: '#0f172a',
+        actorLineColor: '#64748b',
+        signalColor: '#2563eb',
+        signalTextColor: '#0f172a',
+        labelBoxBkgColor: '#ffffff',
+        labelBoxBorderColor: '#cbd5e1',
+        labelTextColor: '#0f172a',
+        loopTextColor: '#0f172a',
+        noteBkgColor: '#fef3c7',
+        noteBorderColor: '#f59e0b',
+        noteTextColor: '#78350f'
+      },
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: true,
+        curve: 'basis',
+        nodeSpacing: 50,
+        rankSpacing: 50,
+        padding: 20
+      }
+    });
+  </script>
+</head>
+<body id="poster-root">
+
+  <!-- HEADER -->
+  <div class="header-card">
+    <div class="header-left">
+      <h1>⚡ DIAGRAM ALUR BISNIS SISTEM MONITORING TTE</h1>
+      <p>Pemerintah Kota Cirebon — Dinas Komunikasi dan Informatika / Bidang Persandian (Release V5.0)</p>
+    </div>
+    <div class="badge-group">
+      <div class="badge">Laravel 13 & PHP 8.3</div>
+      <div class="badge green">Zero-Trust VPN Gateway</div>
+      <div class="badge purple">Two-Stage Verification</div>
+    </div>
+  </div>
+
+  <!-- DIAGRAM 1: ALUR BISNIS UTAMA (FLOWCHART) -->
+  <div id="section-alur-bisnis" class="export-card">
+    <div class="section-title">
+      <div>📊 1. Alur Bisnis Transaksi Utama (End-to-End Two-Stage Workflow)</div>
+      <span class="tag">Pendaftaran Mandiri &bull; Rekap Email &bull; BSrE BSSN &bull; Lifecycle Scanner</span>
+    </div>
+    <div class="diagram-container">
+      <pre class="mermaid">
+flowchart TD
+    %% TAHAP 1: PENDAFTARAN MANDIRI ASN
+    subgraph S1["👤 TAHAP 1: Pendaftaran Mandiri ASN Publik (Portal: /)"]
+        A1["ASN Akses Portal Publik Mandiri<br/>(100% Zero CDN, Payload dibawah 5KB)"]
+        A2["Input Data Kepegawaian:<br/>Nama Lengkap, NIK, NIP, No HP, SKPD, Jabatan, Golongan"]
+        A3{"Apakah ASN Memiliki<br/>Email Dinas Resmi?"}
+        A4["Input Alamat Email Existing<br/>(@cirebonkota.go.id)"]
+        A5["Auto-Generate Usulan Baku:<br/>nama.nip@cirebonkota.go.id"]
+        A6["Verifikasi Anti-Bot CAPTCHA<br/>(reCAPTCHA / Local Math HMAC)"]
+        A7["Draft Auto-Save Aman di Browser (Tanpa PII)<br/>Submit Enkripsi Kolom AES-256-GCM + Blind Index"]
+        A8["Sistem Terbitkan Nomor Registrasi Resmi:<br/>TTE-YYYYMMDD-XXXXXX<br/>Status: MENUNGGU_VERIFIKASI"]
+
+        A1 --> A2 --> A3
+        A3 -- "Sudah Ada" --> A4 --> A6
+        A3 -- "Belum Ada" --> A5 --> A6
+        A6 --> A7 --> A8
+    end
+
+    %% TAHAP 2: VERIFIKASI DISKOMINFO
+    subgraph S2["🛡️ TAHAP 2: Verifikasi Berkas & Rekap Email Dinas (/admin/verifikasi)"]
+        B1["Login Superadmin / Verifikator Diskominfo<br/>(Khusus Subnet VPN Diskominfo + RFC 6238 TOTP MFA)"]
+        B2["Buka Antrean Verifikasi Berkas FIFO"]
+        B3["Pemeriksaan Keabsahan Kepegawaian & Identitas ASN"]
+        B4{"Penetapan / Koreksi<br/>Alamat Email Dinas"}
+        B5["Edit Username & Cek Tabrakan Unik (Collision)"]
+        B6["Klik Tombol Gunakan Usulan"]
+        B7["Klik 'Kunci & Rekap Email' (AJAX)<br/>is_email_recap_confirmed = true"]
+        B8{"Keputusan Verifikator Diskominfo"}
+        B9["Tolak Permohonan + Catatan Alasan<br/>Status: DITOLAK (Boleh Daftar Ulang)"]
+        B10["Setujui Permohonan Tahap 1<br/>Status: DISETUJUI"]
+
+        B1 --> B2 --> B3 --> B4
+        B4 -- "Koreksi Manual" --> B5 --> B7
+        B4 -- "Gunakan Usulan" --> B6 --> B7
+        B7 --> B8
+        B8 -- "Data Tidak Sesuai" --> B9
+        B8 -- "Data Valid & Lengkap" --> B10
+    end
+
+    %% TAHAP 3: MAIL SERVER & BSrE
+    subgraph S3["🏢 TAHAP 3: Pembuatan Mailbox & Pengajuan ke BSrE BSSN"]
+        C1["Admin Mail Server Pemkot Cirebon<br/>Aktivasi Akun Mailbox Fisik Resmi"]
+        C2["Operator Bidang Persandian Diskominfo<br/>Pengajuan Permohonan Penerbitan ke BSrE BSSN"]
+        C3["BSrE Menerbitkan Pasangan Kunci Publik/Privat & Sertifikat TTE"]
+
+        C1 --> C2 --> C3
+    end
+
+    %% TAHAP 4: PENERBITAN TAHAP 2
+    subgraph S4["📋 TAHAP 4: Penerbitan Tahap 2 & Aktivasi Sistem (/admin/penerbitan)"]
+        D1["Buka Antrean Penerbitan Tahap 2 (Khusus Berstatus DISETUJUI)"]
+        D2["Input Nomor Sertifikat Resmi BSrE & Tanggal Penerbitan"]
+        D3["Kalkulasi Otomatis Presisi Masa Berlaku 2 Tahun:<br/>tanggal_kadaluarsa = tanggal_penerbitan + 2 Tahun"]
+        D4["Buat Record 1:1 Sertifikat TTE & Catat Audit Log<br/>Status Sertifikat: AKTIF"]
+
+        D1 --> D2 --> D3 --> D4
+    end
+
+    %% TAHAP 5: SCANNER SIKLUS HIDUP
+    subgraph S5["⚙️ TAHAP 5: Pemantauan Siklus Hidup Harian & Fast Cache"]
+        E1["Daily Lifecycle Scanner Background Cron<br/>(Berjalan Otomatis Setiap Hari Pukul 00:01 WIB)"]
+        E2{"Evaluasi Sisa Hari Masa Berlaku"}
+        E3["Naikkan Status Otomatis:<br/>WARNING_H3 (Peringatan Dini)"]
+        E4["Naikkan Status Otomatis:<br/>EXPIRED (Kedaluwarsa)"]
+        E5["Superadmin Manual Revoke:<br/>REVOKED / PERLU_PERPANJANG"]
+        E6["Picu Refresh Agregator Dashboard Redis (Latensi < 25ms)"]
+
+        E1 --> E2
+        E2 -- "Sisa <= 3 Hari" --> E3 --> E6
+        E2 -- "Lewat Jatuh Tempo" --> E4 --> E6
+        E2 -- "Mutasi / Pensiun" --> E5 --> E6
+    end
+
+    %% RELASI ALUR SEKUENSIAL
+    A8 --> B1
+    B10 --> C1
+    C3 --> D1
+    D4 --> E1
+      </pre>
+    </div>
+  </div>
+
+  <!-- GRID: DIAGRAM 2 (STATE LIFECYCLE) & HIGHLIGHTS -->
+  <div class="grid-2">
+    <!-- DIAGRAM 2: STATE MACHINE -->
+    <div id="section-siklus-status" class="export-card">
+      <div class="section-title">
+        <div>🔄 2. Diagram Siklus Hidup Status (State Lifecycle)</div>
+        <span class="tag">State Machine</span>
+      </div>
+      <div class="diagram-container">
+        <pre class="mermaid">
+flowchart TD
+    M1(["Mulai: ASN Submit Form"]) --> S_MENUNGGU["Status: MENUNGGU_VERIFIKASI"]
+    
+    S_MENUNGGU -->|Verifikator Menolak Berkas| S_DITOLAK["Status: DITOLAK<br/>(Disertai Catatan Penolakan)"]
+    S_DITOLAK -.->|ASN Daftar Ulang Mandiri| S_MENUNGGU
+    
+    S_MENUNGGU -->|Verifikator Setujui & Kunci Email| S_DISETUJUI["Status: DISETUJUI<br/>(Tahap 1 Terverifikasi)"]
+    
+    S_DISETUJUI -->|Input No Sertifikat BSrE & Tgl Terbit| S_AKTIF["Status Sertifikat: AKTIF<br/>(Masa Berlaku +2 Tahun)"]
+    
+    S_AKTIF -->|Cron Harian: Sisa Masa Berlaku <= 3 Hari| S_WARNING["Status Sertifikat: WARNING_H3<br/>(Peringatan Dini Kedaluwarsa)"]
+    
+    S_AKTIF -->|Cron Harian: Lewat Tanggal Kadaluarsa| S_EXPIRED["Status Sertifikat: EXPIRED<br/>(Sertifikat Habis Masa Berlaku)"]
+    S_WARNING -->|Cron Harian: Lewat Tanggal Kadaluarsa| S_EXPIRED
+    
+    S_AKTIF -->|Superadmin Revoke: Mutasi / Pelanggaran| S_REVOKED["Status Sertifikat: REVOKED<br/>(Pencabutan Sertifikat)"]
+    
+    S_AKTIF -->|Pengajuan Pembaruan Data / Sertifikat| S_PERPANJANG["Status: PERLU_PERPANJANG"]
+    S_WARNING -->|Pengajuan Pembaruan Data / Sertifikat| S_PERPANJANG
+    
+    S_EXPIRED --> E1(["Selesai / Perlu Registrasi Baru"])
+    S_REVOKED --> E2(["Selesai: Akses Dicabut"])
+        </pre>
+      </div>
+    </div>
+
+    <!-- HIGHLIGHTS -->
+    <div class="export-card">
+      <div class="section-title">
+        <div>🔒 3. Highlight Arsitektur & Tata Kelola SPBE</div>
+        <span class="tag">Security & Compliance</span>
+      </div>
+      
+      <div class="info-box" style="border-left-color: #0284c7;">
+        <h4>🛡️ Zero-Trust VPN Gateway & Stealth Defense</h4>
+        <p>Seluruh endpoint administratif (<code>/gateway/login</code> dan <code>/admin/*</code>) hanya dapat diakses melalui subnet resmi VPN Diskominfo. Akses dari IP luar menghasilkan respon <b>HTTP 404 Not Found</b> murni untuk mengaburkan sistem dari bot scanner.</p>
+      </div>
+
+      <div class="info-box" style="border-left-color: #16a34a;">
+        <h4>🔍 Perlindungan Data Pribadi (UU PDP No. 27/2022)</h4>
+        <p>Data NIK 16 digit dan NIP 18 digit dienkripsi tingkat kolom menggunakan <b>AES-256-CBC</b> deterministik dan diindeks menggunakan <b>HMAC-SHA256 Blind Indexing</b>. Storage browser (sessionStorage) steril dari data sensitif NIK/NIP.</p>
+      </div>
+
+      <div class="info-box" style="border-left-color: #9333ea;">
+        <h4>⚡ Unbuffered Cursor Streaming Mass Export</h4>
+        <p>Ekspor jutaan baris CSV/Excel menggunakan single query <code>leftJoin()->cursor()</code> bebas N+1 query dengan konsumsi RAM PHP konstan di bawah <b>20 MB</b> tanpa resiko Out-of-Memory (OOM).</p>
+      </div>
+
+      <div class="info-box" style="border-left-color: #d97706;">
+        <h4>⏰ Daily Proactive Scanner (00:01 WIB)</h4>
+        <p>Background job harian otomatis mendeteksi sertifikat yang memasuki zona kritis H-3 (<code>WARNING_H3</code>) dan kedaluwarsa (<code>EXPIRED</code>) untuk menjamin kelancaran penandatanganan dokumen dinas.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Sistem Monitoring Penerbitan TTE & Pelayanan Email Dinas Resmi &bull; Pemerintah Kota Cirebon &bull; Release V5.0
+  </div>
+
+</body>
+</html>

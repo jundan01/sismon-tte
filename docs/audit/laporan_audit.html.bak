@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Audit Kode Program — Sistem Monitoring TTE Kota Cirebon (V5)</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-indigo: #6366f1;
+            --accent-emerald: #10b981;
+            --severity-critical: #ef4444;
+            --severity-warning: #f59e0b;
+            --severity-info: #3b82f6;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 2rem;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
+            padding: 2.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+        }
+
+        header h1 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #818cf8, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .meta-item strong {
+            color: var(--text-primary);
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .stat-card.critical .value { color: var(--severity-critical); }
+        .stat-card.warning .value { color: var(--severity-warning); }
+        .stat-card.info .value { color: var(--severity-info); }
+        .stat-card.total .value { color: var(--accent-indigo); }
+
+        /* Filter Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.5rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .tab-btn.active {
+            color: #ffffff;
+            background-color: var(--accent-indigo);
+        }
+
+        /* Findings List */
+        .finding-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .finding-header {
+            padding: 1.25rem;
+            background-color: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .finding-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge.critical { background-color: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+        .badge.warning { background-color: rgba(245, 158, 11, 0.15); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); }
+        .badge.info { background-color: rgba(59, 130, 246, 0.15); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+
+        .finding-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .finding-path {
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .finding-content {
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .finding-content.open {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-indigo);
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        /* Code Block Container */
+        .code-comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 1rem;
+            margin-top: 0.75rem;
+        }
+
+        .code-box {
+            background-color: #0b0f19;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+
+        .code-box-header {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .code-box.before .code-box-header {
+            background-color: rgba(239, 68, 68, 0.05);
+            color: #f87171;
+        }
+
+        .code-box.after .code-box-header {
+            background-color: rgba(16, 185, 129, 0.05);
+            color: #34d399;
+        }
+
+        pre {
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+            font-size: 0.825rem;
+            line-height: 1.5;
+        }
+
+        code {
+            color: #cbd5e1;
+        }
+
+        .step-list {
+            margin-left: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-list li {
+            margin-bottom: 0.35rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Laporan Audit Kode Program</h1>
+            <p>Hasil audit komprehensif, terstruktur, dan tervalidasi pada Sistem Monitoring TTE &amp; Pelayanan Email Dinas Pemerintah Kota Cirebon (Versi V5).</p>
+            <div class="meta-grid">
+                <div class="meta-item">Aplikasi: <strong>Sistem Monitoring TTE (V5)</strong></div>
+                <div class="meta-item">Tanggal Audit: <strong>15 September 2026</strong></div>
+                <div class="meta-item">Auditor: <strong>Antigravity AI Senior Code Auditor</strong></div>
+                <div class="meta-item">Status Lingkungan: <strong>Localhost / Docker Alpine Stack</strong></div>
+            </div>
+        </header>
+
+        <!-- Stats Overview -->
+        <div class="stats-container">
+            <div class="stat-card total">
+                <h3>Total Temuan</h3>
+                <div class="value">12</div>
+            </div>
+            <div class="stat-card critical">
+                <h3>Kritis (Critical)</h3>
+                <div class="value">4</div>
+            </div>
+            <div class="stat-card warning">
+                <h3>Peringatan (Warning)</h3>
+                <div class="value">6</div>
+            </div>
+            <div class="stat-card info">
+                <h3>Informasi (Info)</h3>
+                <div class="value">2</div>
+            </div>
+        </div>
+
+        <!-- Tabs Filter -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="filterCategory('all', this)">Semua Temuan (12)</button>
+            <button class="tab-btn" onclick="filterCategory('security', this)">Keamanan (3)</button>
+            <button class="tab-btn" onclick="filterCategory('quality', this)">Struktur &amp; Kualitas (3)</button>
+            <button class="tab-btn" onclick="filterCategory('database', this)">Database (3)</button>
+            <button class="tab-btn" onclick="filterCategory('infrastructure', this)">Infrastruktur (3)</button>
+        </div>
+
+        <!-- List of Findings -->
+        <div id="findings-list">
+
+            <!-- ==================== TEMUAN 1 (CRITICAL - SECURITY) ==================== -->
+            <div class="finding-card" data-category="security">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge critical">Critical</span>
+                        <div>
+                            <div class="finding-title">Kerentanan Pemalsuan IP (IP Spoofing) Mengakibatkan Bypass Total Perimeter Zero-Trust VPN Gateway</div>
+                            <div class="finding-path">app/Http/Middleware/EnsureVpnAccess.php:34-43</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Pada middleware <code>EnsureVpnAccess.php</code>, proses ekstraksi IP klien membaca langsung header mentah <code>CF-Connecting-IP</code>, <code>X-Forwarded-For</code>, dan <code>X-Real-IP</code> tanpa memverifikasi apakah request berasal dari Cloudflare IP range atau proxy internal yang sah. Selain itu, pada <code>bootstrap/app.php</code> terkonfigurasi <code>$middleware-&gt;trustProxies(at: '*')</code> secara wildcard, dan reverse proxy Nginx pada <code>docker/nginx/nginx.conf</code> tidak melakukan pembersihan terhadap header <code>CF-Connecting-IP</code> dari koneksi eksternal.
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #fca5a5;">
+                        <strong>Dampak:</strong> Penyerang dari jaringan internet publik mana pun dapat mengirimkan request dengan header HTTP buatan (misalnya: <code>curl -H "CF-Connecting-IP: 10.10.1.50" https://target/gateway/login</code>). Sistem akan membaca IP <code>10.10.1.50</code> yang cocok dengan subnet VPN Diskominfo (<code>10.0.0.0/8</code>), sehingga seluruh rute administratif terbuka penuh dan pertahanan Stealth Mode 404 runtuh seketika.
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Hentikan pembacaan langsung header <code>CF-Connecting-IP</code> atau <code>X-Forwarded-For</code> tanpa memvalidasi apakah IP pengirim fisik (<code>REMOTE_ADDR</code>) adalah rentang IP resmi Cloudflare (misal: <code>173.245.48.0/20</code>, <code>103.21.244.0/22</code>, dll.).</li>
+                        <li>Gunakan metode bawaan Symfony/Laravel <code>$request-&gt;ip()</code> dengan daftar proxy terpercaya spesifik, atau validasikan header secret terenkripsi (<code>VPN_GATEWAY_HEADER</code> dan <code>VPN_GATEWAY_SECRET</code>) untuk request yang melewati reverse proxy.</li>
+                        <li>Pada Nginx (<code>docker/nginx/nginx.conf</code>), pastikan konfigurasi <code>set_real_ip_from</code> dikunci hanya ke IP Cloudflare / Docker bridge yang sah.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (app/Http/Middleware/EnsureVpnAccess.php:34-43)</div>
+                            <pre><code>// 1. Ekstraksi HANYA IP Asal Klien (Originating Client IP)
+if ($cfIp = $request-&gt;header('CF-Connecting-IP')) {
+    $clientOriginIp = trim($cfIp);
+} elseif ($xff = $request-&gt;header('X-Forwarded-For')) {
+    $parts = explode(',', $xff);
+    $clientOriginIp = trim($parts[0]);
+} elseif ($xRealIp = $request-&gt;header('X-Real-IP')) {
+    $clientOriginIp = trim($xRealIp);
+} else {
+    $clientOriginIp = $request-&gt;ip() ?: $request-&gt;server('REMOTE_ADDR');
+}</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (app/Http/Middleware/EnsureVpnAccess.php)</div>
+                            <pre><code>// Validasi IP Sumber: Jangan percayai header klien jika koneksi bukan dari upstream proxy sah
+$directRemoteAddr = $request-&gt;server('REMOTE_ADDR');
+$trustedProxies = config('vpn.trusted_proxies', ['127.0.0.1', '::1', '172.16.0.0/12']);
+
+$isFromTrustedProxy = \Symfony\Component\HttpFoundation\IpUtils::checkIp($directRemoteAddr, $trustedProxies);
+
+if ($isFromTrustedProxy &amp;&amp; ($cfIp = $request-&gt;header('CF-Connecting-IP'))) {
+    $clientOriginIp = trim($cfIp);
+} elseif ($isFromTrustedProxy &amp;&amp; ($xff = $request-&gt;header('X-Forwarded-For'))) {
+    $parts = explode(',', $xff);
+    $clientOriginIp = trim($parts[0]);
+} else {
+    // Jika koneksi langsung dari publik, gunakan IP koneksi fisik murni
+    $clientOriginIp = $directRemoteAddr;
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 2 (CRITICAL - SECURITY) ==================== -->
+            <div class="finding-card" data-category="security">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge critical">Critical</span>
+                        <div>
+                            <div class="finding-title">Ketiadaan Verifikasi Tantangan MFA/TOTP pada Alur Autentikasi Masuk (Broken Authentication)</div>
+                            <div class="finding-path">app/Http/Controllers/Auth/AuthController.php:41-115</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Aplikasi memiliki modul aktivasi Two-Factor/Multi-Factor Authentication (TOTP Google Authenticator) pada <code>UserManagementController.php</code> yang menyimpan <code>mfa_secret</code> dan flag <code>is_mfa_enabled = true</code> pada tabel <code>users</code>. Namun, pada controller autentikasi masuk <code>AuthController::login()</code> dan antarmuka <code>resources/views/auth/login.blade.php</code>, <strong>sama sekali tidak ada logika pemeriksaan ataupun form input kode TOTP 6-digit!</strong>
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #fca5a5;">
+                        <strong>Dampak:</strong> Superadmin yang telah mengaktifkan MFA tetap langsung berhasil login dan diarahkan ke dashboard hanya dengan mencantumkan email dan password. Proteksi MFA (PRD FR-21 dan UU PDP / BSSN) menjadi tidak berfungsi sama sekali (dead security control). Jika password tercuri, penyerang langsung menguasai sistem tanpa proteksi faktor kedua.
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Pada <code>AuthController::login()</code>, setelah verifikasi email dan password berhasil (kredensial valid), periksa apakah <code>$user-&gt;is_mfa_enabled</code> bernilai true.</li>
+                        <li>Jika MFA aktif, tahan proses login penuh. Simpan ID user sementara ke session (<code>mfa_pending_user_id</code>), buat token tantangan sementara, dan kembalikan respon <code>mfa_required: true</code> ke browser.</li>
+                        <li>Sediakan endpoint POST <code>/gateway/login/mfa</code> untuk memverifikasi 6-digit OTP via <code>TotpService::verifyCode()</code> atau recovery code.</li>
+                        <li>Lengkapi form login pada <code>login.blade.php</code> dengan step 2 (input kode 6-digit) yang muncul secara dinamis saat respon <code>mfa_required</code> diterima.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (app/Http/Controllers/Auth/AuthController.php:83-114)</div>
+                            <pre><code>// Login langsung berhasil tanpa verifikasi status is_mfa_enabled
+RateLimiter::clear($throttleKey);
+$request-&gt;session()-&gt;regenerate();
+
+/** @var User $user */
+$user = Auth::user();
+$user-&gt;update(['last_login_at' =&gt; now(), 'last_login_ip' =&gt; $request-&gt;ip()]);
+
+if ($request-&gt;expectsJson() || $request-&gt;is('api/*')) {
+    return response()-&gt;json([
+        'success' =&gt; true,
+        'message' =&gt; 'Autentikasi berhasil.',
+        'redirect_url' =&gt; '/admin/dashboard',
+    ]);
+}
+return redirect()-&gt;intended('/admin/dashboard');</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (app/Http/Controllers/Auth/AuthController.php)</div>
+                            <pre><code>// Periksa status MFA sebelum membuat sesi login resmi
+if ($user-&gt;is_mfa_enabled) {
+    Auth::logout(); // Lepaskan sesi login penuh sementara
+    $request-&gt;session()-&gt;put('mfa:user:id', $user-&gt;id);
+    $request-&gt;session()-&gt;put('mfa:remember', $remember);
+
+    if ($request-&gt;expectsJson() || $request-&gt;is('api/*')) {
+        return response()-&gt;json([
+            'success'      =&gt; true,
+            'mfa_required' =&gt; true,
+            'message'      =&gt; 'Verifikasi Multi-Factor Authentication (OTP 6-digit) diperlukan.',
+        ]);
+    }
+    return redirect()-&gt;route('login.mfa');
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 3 (CRITICAL - SECURITY) ==================== -->
+            <div class="finding-card" data-category="security">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge critical">Critical</span>
+                        <div>
+                            <div class="finding-title">Kerentanan DOM-Based XSS melalui Injeksi Pesan Error API ke innerHTML</div>
+                            <div class="finding-path">public/js/app.js:20-23, resources/views/admin/verifikasi/show.blade.php:482,492</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Fungsi utility <code>window.showToast</code> pada <code>public/js/app.js</code> melakukan assignment parameter <code>message</code> secara langsung ke properti <code>toast.innerHTML</code>. Pada <code>show.blade.php</code> baris 482 &amp; 492, hasil response pengecekan collision email yang mencantumkan nama ASN pemohon (<code>${res.data.message}</code>) dimasukkan secara langsung ke dalam DOM via <code>box.innerHTML</code>.
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #fca5a5;">
+                        <strong>Dampak:</strong> Jika pendaftar menyisipkan muatan HTML/JS (misalnya pada nama ASN atau teks input lainnya) yang dikembalikan oleh backend, skrip berbahaya akan dieksekusi di browser Superadmin saat membuka halaman detail verifikasi atau saat toast notifikasi muncul (CWE-79: Cross-Site Scripting).
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Ubah implementasi <code>showToast</code> pada <code>public/js/app.js</code> agar menggunakan <code>textContent</code> alih-alih <code>innerHTML</code>.</li>
+                        <li>Pada <code>show.blade.php</code>, pisahkan container alert HTML dari teks pesan dinamis menggunakan <code>document.createTextNode</code> atau assign teks ke elemen dengan <code>.textContent</code>.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (public/js/app.js:20-23)</div>
+                            <pre><code>const toast = document.createElement('div');
+toast.className = `toast-flat toast-${type}`;
+toast.innerHTML = `
+    &lt;div&gt;${message}&lt;/div&gt;
+    &lt;button onclick="this.parentElement.remove()"&gt;✕&lt;/button&gt;
+`;</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (public/js/app.js)</div>
+                            <pre><code>const toast = document.createElement('div');
+toast.className = `toast-flat toast-${type}`;
+
+const msgDiv = document.createElement('div');
+msgDiv.textContent = message; // Kebal dari interpretasi script HTML (Safe DOM)
+
+const closeBtn = document.createElement('button');
+closeBtn.textContent = '✕';
+closeBtn.style.cssText = 'background:transparent; border:none; color:#fff; cursor:pointer; font-weight:bold;';
+closeBtn.onclick = () => toast.remove();
+
+toast.appendChild(msgDiv);
+toast.appendChild(closeBtn);</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 4 (CRITICAL - INFRASTRUCTURE) ==================== -->
+            <div class="finding-card" data-category="infrastructure">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge critical">Critical</span>
+                        <div>
+                            <div class="finding-title">Ketiadaan Container Queue Worker Berjalan di docker-compose.yml &amp; Queue Name Mismatch pada audit-logs</div>
+                            <div class="finding-path">docker-compose.yml:30-54, app/Jobs/ProcessAuditLogJob.php:37, composer.json:45</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Pada berkas <code>docker-compose.yml</code> baris 30, service <code>app</code> diberi keterangan "LARAVEL 13 RUNTIME &amp; QUEUE WORKER", namun image container tersebut hanya mengeksekusi <code>php-fpm</code>. Tidak ada daemon atau container queue worker yang berjalan untuk mengeksekusi <code>php artisan queue:work</code>. Selain itu, job <code>ProcessAuditLogJob.php</code> secara eksplisit dikirim ke antrian <code>audit-logs</code> (<code>$this-&gt;onQueue('audit-logs')</code>), sedangkan script dev pada <code>composer.json:45</code> hanya menjalankan <code>queue:listen</code> standar yang hanya mendengarkan antrian <code>default</code>.
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #fca5a5;">
+                        <strong>Dampak:</strong> Di lingkungan Docker produksi, tidak ada satupun background job (pencatatan audit log keamanan, pemindaian sertifikat kadaluarsa harian, dan agregasi statistik) yang pernah dieksekusi. Di lingkungan development, log mutasi transaksi tertimbun permanen di Redis karena worker tidak mendengarkan antrian <code>audit-logs</code>.
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Tambahkan service terpisah <code>queue</code> pada <code>docker-compose.yml</code> yang menjalankan <code>php artisan queue:work redis --queue=default,audit-logs --tries=3 --timeout=60</code>.</li>
+                        <li>Perbarui perintah <code>queue:listen</code> di <code>composer.json</code> baris 45 agar menyertakan flag <code>--queue=default,audit-logs</code>.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (docker-compose.yml:30-54)</div>
+                            <pre><code># 2. LARAVEL 13 RUNTIME &amp; QUEUE WORKER
+app:
+  build:
+    context: ./docker/php
+    dockerfile: Dockerfile
+  image: tte_php:8.3-fpm
+  container_name: tte_app
+  working_dir: /var/www/html
+  restart: always
+  # Tidak ada daemon queue worker terpisah!</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (docker-compose.yml)</div>
+                            <pre><code># 2b. DEDICATED QUEUE WORKER DAEMON
+queue:
+  build:
+    context: ./docker/php
+    dockerfile: Dockerfile
+  image: tte_php:8.3-fpm
+  container_name: tte_queue
+  working_dir: /var/www/html
+  restart: always
+  command: php artisan queue:work redis --queue=default,audit-logs --sleep=3 --tries=3 --timeout=60
+  volumes:
+    - .:/var/www/html
+    - storage_data:/var/www/html/storage
+  networks:
+    - backend
+  depends_on:
+    - app
+    - redis
+    - postgres</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 5 (WARNING - DATABASE) ==================== -->
+            <div class="finding-card" data-category="database">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge warning">Warning</span>
+                        <div>
+                            <div class="finding-title">Race Condition (TOCTOU) &amp; Ketiadaan Partial Unique Index pada Kolom email_final_terverifikasi</div>
+                            <div class="finding-path">app/Domain/Pendaftaran/Actions/ApproveTahap1Action.php:31-56, database/migrations</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Pada <code>ApproveTahap1Action.php</code>, pengecekan ketersediaan email (<code>isEmailTaken</code>) dan pengubahan status pendaftaran dilakukan di luar blok transaksi database (<code>DB::transaction</code>) dan tanpa penguncian baris (<code>lockForUpdate()</code>). Selain itu, pada skema tabel <code>pendaftaran_tte</code>, kolom <code>email_final_terverifikasi</code> belum memiliki constraint unik parsial.
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #fde047;">
+                        <strong>Dampak:</strong> Jika dua superadmin menyetujui dua pendaftaran berbeda yang memiliki usulan email sama secara bersamaan, kondisi balapan (race condition / TOCTOU) akan meloloskan kedua request, menyebabkan duplikasi email kedinasan aktif di database.
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Bungkus seluruh alur persetujuan dalam <code>DB::transaction</code> dengan <code>lockForUpdate()</code> pada record <code>pendaftaran_tte</code>.</li>
+                        <li>Buat migrasi partial unique index pada PostgreSQL: <code>CREATE UNIQUE INDEX idx_pendaftaran_email_final_unique ON pendaftaran_tte (LOWER(email_final_terverifikasi)) WHERE status != 'DITOLAK' AND email_final_terverifikasi IS NOT NULL;</code>.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (app/Domain/Pendaftaran/Actions/ApproveTahap1Action.php:40-58)</div>
+                            <pre><code>// Pengecekan tanpa transaksi DB dan tanpa row locking
+if ($this-&gt;emailService-&gt;isEmailTaken($emailFinal, $pendaftaran-&gt;id)) {
+    throw ValidationException::withMessages([...]);
+}
+
+$pendaftaran-&gt;update([
+    'status' =&gt; 'DISETUJUI',
+    'email_final_terverifikasi' =&gt; $emailFinal,
+]);</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (app/Domain/Pendaftaran/Actions/ApproveTahap1Action.php)</div>
+                            <pre><code>return DB::transaction(function () use ($pendaftaran, $verifiedByUserId, $ipAddress, $emailFinal) {
+    // Kunci baris untuk proteksi konkurensi (Pessimistic Lock)
+    $lockedRecord = PendaftaranTte::where('id', $pendaftaran-&gt;id)-&gt;lockForUpdate()-&gt;firstOrFail();
+
+    if ($this-&gt;emailService-&gt;isEmailTaken($emailFinal, $lockedRecord-&gt;id)) {
+        throw ValidationException::withMessages([
+            'email_final_terverifikasi' =&gt; 'Email dinas telah diambil oleh verifikasi lain yang bersamaan.',
+        ]);
+    }
+
+    $lockedRecord-&gt;update([
+        'status'                    =&gt; 'DISETUJUI',
+        'email_final_terverifikasi' =&gt; $emailFinal,
+        'verified_by'               =&gt; $verifiedByUserId,
+        'verified_at'               =&gt; now(),
+    ]);
+
+    return $lockedRecord-&gt;fresh();
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 6 (WARNING - DATABASE) ==================== -->
+            <div class="finding-card" data-category="database">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge warning">Warning</span>
+                        <div>
+                            <div class="finding-title">Potensi Bottleneck Memori &amp; Kelambatan Eksekusi Akibat Kueri Unpaginated ->get() pada Antrian Tahap 2</div>
+                            <div class="finding-path">app/Http/Controllers/PenerbitanController.php:31-35</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Pada <code>PenerbitanController.php</code>, kueri untuk mengambil antrian pendaftaran ASN yang telah disetujui (Tahap 1 selesai) dieksekusi dengan metode <code>-&gt;get()</code> tanpa paginasi atau limitasi chunk.
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #fde047;">
+                        <strong>Dampak:</strong> Ketika antrian menumpuk ratusan hingga ribuan ASN, ribuan model Eloquent beserta relasi eager-loading (SKPD, Jabatan, Golongan) dimuat sekaligus ke memori PHP. Hal ini memicu lonjakan konsumsi RAM server dan latensi rendering yang tinggi.
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Terapkan paginasi eksplisit pada antrian tahap 2 (misalnya: <code>paginate(15, ['*'], 'antrian_page')</code>).</li>
+                        <li>Tambahkan navigasi pagination links di tampilan antrian <code>admin.penerbitan.index</code>.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (app/Http/Controllers/PenerbitanController.php:31-35)</div>
+                            <pre><code>$antrianTahap2 = PendaftaranTte::with(['skpd', 'jabatan', 'golongan'])
+    -&gt;where('status', 'DISETUJUI')
+    -&gt;doesntHave('sertifikat')
+    -&gt;orderBy('verified_at', 'asc')
+    -&gt;get(); // Tanpa paginasi!</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (app/Http/Controllers/PenerbitanController.php)</div>
+                            <pre><code>$antrianTahap2 = PendaftaranTte::with(['skpd', 'jabatan', 'golongan'])
+    -&gt;where('status', 'DISETUJUI')
+    -&gt;doesntHave('sertifikat')
+    -&gt;orderBy('verified_at', 'asc')
+    -&gt;paginate(15, ['*'], 'antrian_page')
+    -&gt;withQueryString();</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 7 (WARNING - DATABASE) ==================== -->
+            <div class="finding-card" data-category="database">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge warning">Warning</span>
+                        <div>
+                            <div class="finding-title">Penggunaan Sintaks Postgres-Spesifik ::numeric dan ilike Tanpa Standarisasi ANSI SQL</div>
+                            <div class="finding-path">app/Http/Controllers/DashboardController.php:75, CapaianSkpdController.php:50,98</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Kueri analitik pada <code>DashboardController.php</code> dan <code>CapaianSkpdController.php</code> menggunakan cast spesifik PostgreSQL: <code>COUNT(pendaftaran_tte.id)::numeric</code> dan klausa pencarian <code>ilike</code>.
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #fde047;">
+                        <strong>Dampak:</strong> Kueri langsung gagal (syntax error) saat dijalankan di database non-Postgres (misalnya SQLite untuk automated in-memory testing atau MySQL pada lingkungan staging).
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Ganti cast <code>::numeric</code> dengan sintaks standar ANSI SQL <code>CAST(... AS NUMERIC)</code> atau <code>CAST(... AS DECIMAL(10,2))</code>.</li>
+                        <li>Ganti pemanggilan <code>ilike</code> dengan fungsi portabel <code>whereRaw('LOWER(kolom) LIKE LOWER(?)', ["%{$search}%"])</code>.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (app/Http/Controllers/DashboardController.php:75)</div>
+                            <pre><code>DB::raw("CASE WHEN COALESCE(skpd.total_asn, 0) &gt; 0 THEN ROUND((COUNT(pendaftaran_tte.id)::numeric / skpd.total_asn) * 100, 1) ELSE 0 END as persentase_capaian")</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (app/Http/Controllers/DashboardController.php)</div>
+                            <pre><code>DB::raw("CASE WHEN COALESCE(skpd.total_asn, 0) &gt; 0 THEN ROUND((CAST(COUNT(pendaftaran_tte.id) AS NUMERIC) / skpd.total_asn) * 100, 1) ELSE 0 END as persentase_capaian")</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 8 (WARNING - INFRASTRUCTURE) ==================== -->
+            <div class="finding-card" data-category="infrastructure">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge warning">Warning</span>
+                        <div>
+                            <div class="finding-title">Direktif session.cookie_secure = 0 pada Konfigurasi PHP Container</div>
+                            <div class="finding-path">docker/php/php.ini:31</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Pada berkas konfigurasi PHP container <code>docker/php/php.ini</code> baris 31, terdapat konfigurasi sesi: <code>session.cookie_secure = 0</code>.
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #fde047;">
+                        <strong>Dampak:</strong> Pada aplikasi berbasis HTTPS (port 443 dengan SSL SAN), cookie sesi berisiko ditransmisikan melalui kanal HTTP tanpa enkripsi saat terjadi kesalahan proxy forwarding, membuka celah <em>Session Sniffing</em> dan <em>Man-in-the-Middle (MitM)</em>.
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Ubah nilai <code>session.cookie_secure = 1</code> di <code>docker/php/php.ini</code>.</li>
+                        <li>Pastikan variabel lingkungan <code>SESSION_SECURE_COOKIE=true</code> pada berkas <code>.env</code> produksi.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (docker/php/php.ini:31)</div>
+                            <pre><code>[session]
+session.use_strict_mode = 1
+session.cookie_httponly = 1
+session.cookie_secure = 0
+session.cookie_samesite = "Strict"</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (docker/php/php.ini)</div>
+                            <pre><code>[session]
+session.use_strict_mode = 1
+session.cookie_httponly = 1
+session.cookie_secure = 1
+session.cookie_samesite = "Strict"</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 9 (WARNING - INFRASTRUCTURE) ==================== -->
+            <div class="finding-card" data-category="infrastructure">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge warning">Warning</span>
+                        <div>
+                            <div class="finding-title">Kunci Rahasia Aplikasi (APP_KEY) Ter-hardcode pada File Contoh .env.example</div>
+                            <div class="finding-path">.env.example:3</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Berkas <code>.env.example</code> menyertakan nilai default <code>APP_KEY=base64:k4xYIeYL82UYtQwFF6SEoeh+69K6Q2C86n3W+dkSzO0=</code>.
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #fde047;">
+                        <strong>Dampak:</strong> Jika administrator atau teknisi menyalin <code>.env.example</code> menjadi <code>.env</code> tanpa menjalankan <code>php artisan key:generate</code>, aplikasi di server produksi akan berjalan menggunakan master key publik ini. Siapa pun yang mengetahui key ini dapat memalsukan cookie sesi terenkripsi, mendekripsi data pribadi ASN, dan mengeksploitasi deserialisasi.
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Kosongkan nilai <code>APP_KEY=</code> pada berkas <code>.env.example</code>.</li>
+                        <li>Pastikan skrip setup onboarding otomatis menjalankan <code>php artisan key:generate</code>.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (.env.example:3)</div>
+                            <pre><code>APP_NAME="Sistem Monitoring TTE (Testing)"
+APP_ENV=local
+APP_KEY=base64:k4xYIeYL82UYtQwFF6SEoeh+69K6Q2C86n3W+dkSzO0=
+APP_DEBUG=true</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (.env.example)</div>
+                            <pre><code>APP_NAME="Sistem Monitoring TTE"
+APP_ENV=production
+APP_KEY=
+APP_DEBUG=false</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 10 (WARNING - QUALITY) ==================== -->
+            <div class="finding-card" data-category="quality">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge warning">Warning</span>
+                        <div>
+                            <div class="finding-title">Kerentanan Race Condition pada Pengecekan Eksistensi Sertifikat Sebelum Transaksi</div>
+                            <div class="finding-path">app/Domain/Sertifikat/Actions/TerbitkanSertifikatAction.php:29-33</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Pengecekan duplikasi penerbitan sertifikat (<code>$pendaftaran-&gt;sertifikat()-&gt;exists()</code>) dilakukan di luar blok transaksi <code>DB::transaction</code>.
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #fde047;">
+                        <strong>Dampak:</strong> Jika terjadi submit ganda (double-click atau parallel requests), kedua permintaan lolos melewati validasi eksistensi dan memicu kegagalan database <code>QueryException</code> (500 Internal Server Error) alih-alih ditolak dengan pesan validasi yang ramah pengguna.
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Pindahkan validasi eksistensi ke dalam blok transaksi dan terapkan penguncian baris (<code>lockForUpdate()</code>).</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (TerbitkanSertifikatAction.php:29-33)</div>
+                            <pre><code>if ($pendaftaran-&gt;sertifikat()-&gt;exists()) {
+    throw ValidationException::withMessages([
+        'sertifikat' =&gt; 'Sertifikat TTE untuk pendaftaran ini sudah pernah diterbitkan.',
+    ]);
+}
+
+return DB::transaction(function () use ($pendaftaran, ...) { ... });</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (TerbitkanSertifikatAction.php)</div>
+                            <pre><code>return DB::transaction(function () use ($pendaftaran, $tanggalPenerbitan, $emailDinas, $verifiedByUserId, $ipAddress) {
+    // Validasi di dalam transaksi terisolasi dengan locking
+    $pendaftaranLocked = PendaftaranTte::where('id', $pendaftaran-&gt;id)-&gt;lockForUpdate()-&gt;firstOrFail();
+
+    if ($pendaftaranLocked-&gt;sertifikat()-&gt;exists()) {
+        throw ValidationException::withMessages([
+            'sertifikat' =&gt; 'Sertifikat TTE untuk pendaftaran ini sudah pernah diterbitkan.',
+        ]);
+    }
+    // Lanjutkan pembuatan sertifikat...
+});</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 11 (INFO - QUALITY) ==================== -->
+            <div class="finding-card" data-category="quality">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge info">Info</span>
+                        <div>
+                            <div class="finding-title">Inkonsistensi Mutator Model PendaftaranTte Saat Menerima Nilai Kosong/Null</div>
+                            <div class="finding-path">app/Domain/Pendaftaran/Models/PendaftaranTte.php:73-89</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Mutator <code>setNikAttribute</code> dan <code>setNipAttribute</code> hanya memproses data jika <code>$value !== null &amp;&amp; $value !== ''</code> tanpa blok <code>else</code>.
+                    </p>
+                    <p style="margin-top: 0.5rem; color: #93c5fd;">
+                        <strong>Dampak:</strong> Jika ada operasi pengosongan atau resetting data dengan nilai <code>null</code>, nilai lama di dalam model tidak terhapus.
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Sematkan penanganan eksplisit untuk nilai <code>null</code> atau string kosong pada kedua mutator.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (PendaftaranTte.php:73-78)</div>
+                            <pre><code>public function setNikAttribute(?string $value): void
+{
+    if ($value !== null &amp;&amp; $value !== '') {
+        $this-&gt;attributes['nik'] = \App\Services\Security\CryptoHelper::encryptField($value);
+    }
+}</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (PendaftaranTte.php)</div>
+                            <pre><code>public function setNikAttribute(?string $value): void
+{
+    if ($value !== null &amp;&amp; $value !== '') {
+        $this-&gt;attributes['nik'] = \App\Services\Security\CryptoHelper::encryptField($value);
+    } else {
+        $this-&gt;attributes['nik'] = null;
+    }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== TEMUAN 12 (INFO - QUALITY) ==================== -->
+            <div class="finding-card" data-category="quality">
+                <div class="finding-header" onclick="toggleDetails(this)">
+                    <div class="finding-header-left">
+                        <span class="badge info">Info</span>
+                        <div>
+                            <div class="finding-title">Saran Perapian Basis Kode (Code Cleanliness, Dead Code Elimination &amp; Config Cache Compliance)</div>
+                            <div class="finding-path">app/Http/Controllers/Auth/AuthController.php:140-160, config/vpn.php:33-43</div>
+                        </div>
+                    </div>
+                    <div><span class="toggle-icon">▼</span></div>
+                </div>
+                <div class="finding-content">
+                    <div class="section-title">Deskripsi &amp; Dampak</div>
+                    <p>
+                        Ditemukan beberapa ketidakteraturan minor kosmetik dan sisa artefak:
+                    </p>
+                    <ul class="step-list">
+                        <li>Metode <code>register()</code> pada <code>AuthController.php</code> tidak memiliki rute di <code>routes/web.php</code> (dead code).</li>
+                        <li>Berkas <code>config/vpn.php</code> memanggil fungsi <code>file_get_contents(base_path('.env'))</code> secara langsung di dalam file konfigurasi, yang menyalahi best practice Laravel config caching (<code>php artisan config:cache</code>).</li>
+                        <li>Duplikasi key pada return view <code>DashboardController.php</code> (camelCase dan snake_case secara bersamaan).</li>
+                    </ul>
+                    <p style="margin-top: 0.5rem; color: #93c5fd;">
+                        <strong>Dampak:</strong> Mempengaruhi kerapian basis kode dan potensi error saat konfigurasi di-cache di lingkungan produksi tanpa berkas fisik <code>.env</code>.
+                    </p>
+
+                    <div class="section-title">Rekomendasi Tata Cara Perbaikan</div>
+                    <ol class="step-list">
+                        <li>Hapus metode <code>register()</code> yang tidak terpakai dari <code>AuthController.php</code>.</li>
+                        <li>Ubah konfigurasi <code>config/vpn.php</code> agar mengandalkan <code>env('VPN_ALLOWED_SUBNETS')</code> standar tanpa membaca file <code>.env</code> langsung.</li>
+                        <li>Standarisasi variabel view data di <code>DashboardController.php</code> menjadi satu format yang konsisten.</li>
+                    </ol>
+
+                    <div class="section-title">Rekomendasi Perubahan Struktur / Kode</div>
+                    <div class="code-comparison">
+                        <div class="code-box before">
+                            <div class="code-box-header">Kode Saat Ini (config/vpn.php:33-43)</div>
+                            <pre><code>'allowed_subnets' =&gt; (function () {
+    $raw = env('VPN_ALLOWED_SUBNETS');
+    if (file_exists(base_path('.env'))) {
+        $envContent = file_get_contents(base_path('.env'));
+        if (preg_match('/^VPN_ALLOWED_SUBNETS=(.*)$/m', $envContent, $matches)) {
+            $raw = trim(trim($matches[1]), "\"'");
+        }
+    }
+    $raw = $raw ?: '127.0.0.1/32,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16';
+    return array_values(array_filter(array_map('trim', explode(',', $raw))));
+})(),</code></pre>
+                        </div>
+                        <div class="code-box after">
+                            <div class="code-box-header">Rekomendasi Perbaikan (config/vpn.php)</div>
+                            <pre><code>'allowed_subnets' =&gt; array_values(array_filter(array_map('trim', explode(
+    ',',
+    env('VPN_ALLOWED_SUBNETS', '127.0.0.1/32,::1/128,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16')
+)))),</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function toggleDetails(headerElement) {
+            const content = headerElement.nextElementSibling;
+            const icon = headerElement.querySelector('.toggle-icon');
+            
+            content.classList.toggle('open');
+            if (content.classList.contains('open')) {
+                icon.textContent = '▲';
+            } else {
+                icon.textContent = '▼';
+            }
+        }
+
+        function filterCategory(category, clickedButton) {
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+
+            const cards = document.querySelectorAll('.finding-card');
+            cards.forEach(card => {
+                if (category === 'all') {
+                    card.style.display = 'block';
+                } else if (card.getAttribute('data-category') === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

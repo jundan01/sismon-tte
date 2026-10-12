@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentasi Sistem Monitoring TTE & Email Dinas - Pemkot Cirebon</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-alt: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #0284c7;
+            --accent-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-amber: #f59e0b;
+            --accent-rose: #f43f5e;
+            --accent-purple: #8b5cf6;
+            --border-color: #334155;
+            --border-highlight: #0284c7;
+            --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'IBM Plex Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            user-select: none;
+        }
+
+        /* Presentation Container */
+        .presentation-deck {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Slide Frame */
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            padding: 40px 60px 70px 60px;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transform: scale(0.98);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        /* Header Bar in Slide */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+
+        .slide-title-area {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .slide-category {
+            font-size: 0.8rem;
+            font-family: var(--font-mono);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent-cyan);
+            font-weight: 600;
+        }
+
+        .slide-title {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .slide-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .badge-system {
+            background: rgba(2, 132, 199, 0.15);
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-cyan);
+            padding: 4px 10px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 0px;
+            text-transform: uppercase;
+        }
+
+        /* Slide Content Area */
+        .slide-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+            padding: 10px 0;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        /* Cards and Panels */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0px;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .card-highlight {
+            border-top: 3px solid var(--accent-cyan);
+        }
+
+        .card-green {
+            border-top: 3px solid var(--accent-green);
+        }
+
+        .card-amber {
+            border-top: 3px solid var(--accent-amber);
+        }
+
+        .card-rose {
+            border-top: 3px solid var(--accent-rose);
+        }
+
+        .card-purple {
+            border-top: 3px solid var(--accent-purple);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-text {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Lists */
+        ul.styled-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        ul.styled-list li {
+            position: relative;
+            padding-left: 20px;
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        ul.styled-list li::before {
+            content: "■";
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: var(--accent-cyan);
+            font-size: 0.75rem;
+        }
+
+        ul.styled-list li strong {
+            color: #ffffff;
+        }
+
+        /* Stat Boxes */
+        .stat-box {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: var(--accent-cyan);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        /* Tables */
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .table-custom th, .table-custom td {
+            padding: 10px 14px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .table-custom th {
+            background: var(--bg-card-alt);
+            color: #ffffff;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.78rem;
+            letter-spacing: 0.5px;
+        }
+
+        .table-custom tr:nth-child(even) {
+            background: rgba(30, 41, 59, 0.5);
+        }
+
+        .table-custom td {
+            color: var(--text-secondary);
+        }
+
+        .table-custom td strong {
+            color: #ffffff;
+        }
+
+        /* Code/Mono Snippets */
+        .code-block {
+            background: #090d16;
+            border: 1px solid #1e293b;
+            padding: 12px 16px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: #38bdf8;
+            overflow-x: auto;
+            border-left: 3px solid var(--accent-blue);
+        }
+
+        /* Cover Slide Specific */
+        .slide-cover {
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            padding: 60px;
+        }
+
+        .cover-badge {
+            display: inline-block;
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+            padding: 6px 16px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .cover-title {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.15;
+            margin-bottom: 16px;
+            max-width: 950px;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .cover-title span {
+            color: var(--accent-cyan);
+        }
+
+        .cover-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+
+        .cover-meta {
+            display: flex;
+            gap: 30px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 24px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-family: var(--font-mono);
+        }
+
+        .cover-meta strong {
+            color: var(--text-primary);
+        }
+
+        /* Bottom Controls & Status Bar */
+        .bottom-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 48px;
+            background: #090d16;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 100;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .bar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-family: var(--font-mono);
+        }
+
+        .bar-center {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 5px 14px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border-radius: 0px;
+            font-family: var(--font-sans);
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--accent-blue);
+            border-color: var(--accent-blue);
+            color: #ffffff;
+        }
+
+        .slide-counter {
+            font-family: var(--font-mono);
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--accent-cyan);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Keyboard Hints Overlay */
+        .key-hints {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .key-badge {
+            background: var(--bg-card-alt);
+            padding: 2px 6px;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+        }
+
+        /* Speaker Notes Panel */
+        .speaker-notes-panel {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 380px;
+            height: calc(100vh - 48px);
+            background: rgba(15, 23, 42, 0.95);
+            border-left: 1px solid var(--accent-blue);
+            padding: 24px;
+            z-index: 200;
+            overflow-y: auto;
+            backdrop-filter: blur(8px);
+        }
+
+        .speaker-notes-panel.open {
+            display: block;
+        }
+
+        .notes-title {
+            font-size: 0.9rem;
+            font-family: var(--font-mono);
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notes-content {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .notes-content p {
+            margin-bottom: 12px;
+        }
+
+        .notes-content strong {
+            color: #ffffff;
+        }
+
+        /* Print Media Styles */
+        @media print {
+            body {
+                overflow: visible !important;
+                height: auto !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+
+            .presentation-deck {
+                display: block !important;
+                height: auto !important;
+            }
+
+            .slide {
+                display: flex !important;
+                opacity: 1 !important;
+                transform: none !important;
+                page-break-after: always !important;
+                height: 100vh !important;
+                background: #ffffff !important;
+                color: #000000 !important;
+                padding: 40px !important;
+                border-bottom: 2px solid #000000 !important;
+            }
+
+            .slide-header {
+                border-color: #cccccc !important;
+            }
+
+            .slide-title {
+                color: #000000 !important;
+            }
+
+            .card {
+                background: #f8fafc !important;
+                border-color: #cccccc !important;
+                color: #000000 !important;
+            }
+
+            .card-title {
+                color: #000000 !important;
+            }
+
+            .card-text, ul.styled-list li, .table-custom td {
+                color: #333333 !important;
+            }
+
+            .bottom-bar, .speaker-notes-panel {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="presentation-deck" id="deck">
+
+    <!-- Progress Top Bar -->
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 1: COVER -->
+    <!-- ========================================== -->
+    <div class="slide slide-cover active" data-slide="1">
+        <div class="cover-badge">DOKUMEN PRESENTASI RESMI SKALA NASIONAL</div>
+        <h1 class="cover-title">SISTEM MONITORING <span>PENERBITAN TTE</span> & PELAYANAN EMAIL DINAS</h1>
+        <p class="cover-subtitle">Pemerintah Kota Cirebon — Dinas Komunikasi dan Informatika / Bidang Persandian<br>Transformasi Digital SPBE Berdaulat, Efisien, dan Aman (V4.1 Post-Audit Hardened)</p>
+        <div class="cover-meta">
+            <div>FRAMEWORK: <strong>Laravel 13 + PHP 8.3 FPM</strong></div>
+            <div>DATABASE: <strong>PostgreSQL 16 + Redis 7</strong></div>
+            <div>SECURITY: <strong>Zero-Trust VPN Gateway</strong></div>
+            <div>VERSI: <strong>3.2.0-PROD (V4.1)</strong></div>
+        </div>
+        <div style="display: none;" class="notes">
+            Selamat pagi/siang bapak/ibu sekalian. Hari ini kami mempresentasikan Sistem Monitoring Penerbitan Tanda Tangan Elektronik (TTE) dan Pelayanan Email Dinas Resmi Pemerintah Kota Cirebon versi 4.1. Sistem ini telah melalui tahap audit menyeluruh 4 pilar dan siap beroperasi di level produksi skala nasional dengan standar keamanan BSSN dan UU PDP.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 2: LATAR BELAKANG & URGENSI -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="2">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">01. PENDAHULUAN & REGULASI</span>
+                <h2 class="slide-title">Latar Belakang & Urgensi Sistem</h2>
+            </div>
+            <span class="badge-system">MANDAT SPBE & UU PDP</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-3">
+                <div class="card card-highlight">
+                    <div class="card-title">🏛️ Mandat SPBE & BSrE BSSN</div>
+                    <p class="card-text">
+                        Berdasarkan <strong>Perpres No. 95/2018</strong>, seluruh naskah dinas kedinasan (SK, SPT, Nota Dinas) wajib beralih ke dokumen elektronik yang terotentikasi. Diskominfo Kota Cirebon bermitra resmi dengan <strong>BSrE BSSN</strong> sebagai Registration Authority.
+                    </p>
+                </div>
+                <div class="card card-amber">
+                    <div class="card-title">🛡️ Kepatuhan UU PDP No. 27/2022</div>
+                    <p class="card-text">
+                        Pemrosesan data identitas ASN (NIK 16 digit & NIP 18 digit) menempatkan Pemkot sebagai <strong>Pengendali Data Pribadi</strong> yang wajib menerapkan enkripsi <em>at-rest</em> dan pembatasan akses ketat terhadap data sensitif.
+                    </p>
+                </div>
+                <div class="card card-green">
+                    <div class="card-title">📧 Syarat Email Dinas Resmi</div>
+                    <p class="card-text">
+                        BSrE BSSN mewajibkan akun email dinas resmi <strong>@cirebonkota.go.id</strong> sebagai identitas tunggal penerbitan sertifikat. Diperlukan alur terintegrasi antara verifikasi identitas kepegawaian dan pembuatan email dinas.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card" style="background: rgba(15, 23, 42, 0.4);">
+                <div class="card-title">⚠️ Masalah Ekosistem Lama (Sebelum Sistem V4)</div>
+                <div class="grid-3" style="gap: 12px;">
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        <strong style="color: var(--accent-rose);">1. Google Forms Publik:</strong> Data NIK/NIP tersimpan di server luar negeri tanpa enkripsi lokal.
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        <strong style="color: var(--accent-rose);">2. Format Email Acak:</strong> Banyak ASN tidak memiliki email dinas atau format usulan tidak seragam.
+                    </div>
+                    <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                        <strong style="color: var(--accent-rose);">3. Sertifikat Mati Senyap:</strong> Masa aktif sertifikat 2 tahun habis tanpa peringatan dini H-3.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Urgensi pembangunan sistem ini dilandasi oleh 3 pilar: Pertama, mandat Perpres SPBE 95/2018; Kedua, kewajiban hukum UU PDP No 27/2022 untuk melindungi NIK dan NIP; Ketiga, standardisasi email dinas cirebonkota.go.id sebagai syarat mutlak BSrE BSSN. Sistem lama dengan Google Forms melanggar UU PDP dan tidak memiliki monitoring siklus hidup sertifikat.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 3: ANALISIS MASALAH & SOLUSI V4.1 -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="3">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">02. ANALISIS MASALAH & SOLUSI</span>
+                <h2 class="slide-title">Matriks Masalah Operasional vs Solusi Arsitektural</h2>
+            </div>
+            <span class="badge-system">POST-AUDIT HARDENED</span>
+        </div>
+        <div class="slide-body">
+            <table class="table-custom">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Masalah Konvensional</th>
+                        <th style="width: 35%;">Risiko & Dampak Sistemik</th>
+                        <th style="width: 40%;">Solusi Teruji Sistem V4.1</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Form Pihak Ketiga (Google Form)</strong></td>
+                        <td>Pelanggaran UU PDP, data di cloud luar, tanpa enkripsi at-rest.</td>
+                        <td><strong style="color: var(--accent-cyan);">Portal Mandiri On-Premise:</strong> Enkripsi AES-256-GCM + Blind Indexing PostgreSQL 16.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Login Admin Terbuka di Internet</strong></td>
+                        <td>Target <em>credential stuffing</em>, bot brute force, dan DDoS.</td>
+                        <td><strong style="color: var(--accent-cyan);">Zero-Trust VPN Gateway:</strong> Rute /gateway/login hanya bisa diakses dari VPN Diskominfo + Stealth 404.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Format Usulan Email Tidak Seragam</strong></td>
+                        <td>Konflik mailbox di mail server dan penolakan penerbitan BSrE.</td>
+                        <td><strong style="color: var(--accent-cyan);">Auto Email Generator:</strong> Format nama.nip@cirebonkota.go.id + Widget Rekap Email AJAX 1-Klik.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Beban Unggah Dokumen Berkas Fisik</strong></td>
+                        <td>Koneksi seluler pelosok putus, gagal upload file berulang kali.</td>
+                        <td><strong style="color: var(--accent-cyan);">Formulir Ramping Tanpa Upload:</strong> Payload < 5KB + Draft Auto-Save sessionStorage aman.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ekspor Data Massal Crash (OOM)</strong></td>
+                        <td>Server crash kehabisan RAM saat mengekspor ratusan ribu records.</td>
+                        <td><strong style="color: var(--accent-cyan);">Database Cursor Streaming:</strong> Single query leftJoin cursor, RAM stabil < 20MB, zero N+1.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div style="display: none;" class="notes">
+            Tabel ini merangkum perbandingan 5 masalah fatal pada operasional lama dan bagaimana sistem V4.1 menyelesaikannya secara elegan. Form mandiri mengamankan NIK/NIP; VPN Gateway memblokir serangan bot publik; Auto Email Generator memangkas verifikasi dari 15 menit ke 1 menit; dan Cursor Streaming menjamin ekspor ratusan ribu baris data tidak akan membuat server kehabisan memori.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 4: TUJUAN SISTEM & TARGET KPI -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="4">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">03. SASARAN STRATEGIS</span>
+                <h2 class="slide-title">Tujuan Pembangunan & Target KPI Operasional</h2>
+            </div>
+            <span class="badge-system">SERVICE LEVEL AGREEMENT</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="card card-highlight">
+                    <div class="card-title">🎯 Sasaran Bisnis & Tata Kelola</div>
+                    <ul class="styled-list">
+                        <li><strong>Standardisasi Satu Pintu:</strong> Melayani seluruh ASN dari 20 SKPD Kota Cirebon secara terpadu tanpa formulir manual parsial.</li>
+                        <li><strong>Efisiensi Rekapitulasi:</strong> Otomatisasi penetapan email dinas dan pencatatan nomor sertifikat BSrE secara deterministik.</li>
+                        <li><strong>Lifecycle Proaktif:</strong> Monitoring masa aktif sertifikat secara otomatis dengan status H-3 Warning Zone dan Expired.</li>
+                        <li><strong>Transparansi Eksekutif:</strong> Dashboard analitik antrian dan beban SKPD secara sub-milidetik.</li>
+                    </ul>
+                </div>
+                <div class="card card-green">
+                    <div class="card-title">⚡ Target Key Performance Indicators (KPI)</div>
+                    <div class="grid-2" style="gap: 12px;">
+                        <div class="stat-box">
+                            <div class="stat-value">≥ 99.9%</div>
+                            <div class="stat-label">System Uptime SLA</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">< 2.0 Detik</div>
+                            <div class="stat-label">Page Load (Jaringan 3G)</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">< 20 MB</div>
+                            <div class="stat-label">RAM PHP Saat Ekspor CSV</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-value">< 25 ms</div>
+                            <div class="stat-label">Latensi Query Dashboard</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Target SLA sistem ini sangat ketat: Uptime minimal 99.9%, waktu muat form di bawah 2 detik bahkan pada jaringan 3G seluler pelosok, konsumsi memori ekspor CSV konstan di bawah 20 MB, dan respons query dashboard di bawah 25 milidetik berkat integrasi in-memory caching Redis 7.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 5: STACK TEKNOLOGI ENTERPRISE -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="5">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">04. ARSITEKTUR TEKNOLOGI</span>
+                <h2 class="slide-title">Stack Teknologi Enterprise Skala Nasional</h2>
+            </div>
+            <span class="badge-system">CLEAN DOMAIN ARCHITECTURE</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-4">
+                <div class="card card-highlight">
+                    <div class="card-title">⚙️ Backend Core</div>
+                    <p style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">Laravel 13 + PHP 8.3 FPM</p>
+                    <ul class="styled-list" style="font-size: 0.8rem;">
+                        <li>OPcache JIT Engine</li>
+                        <li>Clean Domain Structure</li>
+                        <li>Policy Authorization</li>
+                    </ul>
+                </div>
+                <div class="card card-green">
+                    <div class="card-title">🗄️ Relational DB</div>
+                    <p style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">PostgreSQL 16 Alpine</p>
+                    <ul class="styled-list" style="font-size: 0.8rem;">
+                        <li>Native Partitioning</li>
+                        <li>Partial Unique Index</li>
+                        <li>JSONB + GIN Indexing</li>
+                    </ul>
+                </div>
+                <div class="card card-amber">
+                    <div class="card-title">⚡ Cache & Queue</div>
+                    <p style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">Redis 7 Alpine</p>
+                    <ul class="styled-list" style="font-size: 0.8rem;">
+                        <li>Sub-ms Fast Caching</li>
+                        <li>Async Queue 'audit-logs'</li>
+                        <li>AOF Mode & Requirepass</li>
+                    </ul>
+                </div>
+                <div class="card card-purple">
+                    <div class="card-title">🛡️ Edge Proxy & UI</div>
+                    <p style="font-size: 0.85rem; color: #ffffff; font-weight: 600;">Nginx + Carbon Flat</p>
+                    <ul class="styled-list" style="font-size: 0.8rem;">
+                        <li>TLS 1.3 & Rate Limiting</li>
+                        <li>100% Zero External CDN</li>
+                        <li>0px Radius Flat UI</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card" style="background: rgba(30, 41, 59, 0.4);">
+                <div class="card-title">🐳 Isolasi Kontainerisasi Docker Compose V2</div>
+                <div class="grid-3" style="font-size: 0.82rem; color: var(--text-secondary);">
+                    <div><strong>Named Volumes:</strong> vendor_data & node_data bebas latensi I/O.</div>
+                    <div><strong>Network Segmentation:</strong> frontend bridge & backend (internal: true).</div>
+                    <div><strong>Security Hardening:</strong> non-root user 1000:1000 & no-new-privileges.</div>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Arsitektur dibangun di atas 4 pilar teknologi mutakhir: Laravel 13 dengan PHP 8.3; PostgreSQL 16 dengan Native Partitioning; Redis 7 sebagai asynchronous queue broker; dan Nginx Hardened Edge Proxy. Seluruh dependensi berjalan di dalam kontainer Docker dengan isolasi jaringan backend internal yang tidak dapat diakses langsung dari internet.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 6: ALUR BISNIS DUA TAHAP -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="6">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">05. ALUR BISNIS & TRANSAKSI</span>
+                <h2 class="slide-title">Siklus Hidup Transaksi Dua Tahap (Two-Stage Verification)</h2>
+            </div>
+            <span class="badge-system">VERIFIKASI & PENERBITAN</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-3">
+                <div class="card card-highlight">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="badge-system" style="background: rgba(6,182,212,0.2);">TAHAP 1</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">ASN PUBLIK</span>
+                    </div>
+                    <div class="card-title">Pendaftaran Mandiri</div>
+                    <p class="card-text">ASN input Nama, NIK, NIP, HP, SKPD, Jabatan, Golongan, & status email. Sistem generate usulan email & simpan ciphertext AES-256-GCM.</p>
+                    <div class="code-block" style="font-size: 0.75rem;">Status: MENUNGGU_VERIFIKASI</div>
+                </div>
+
+                <div class="card card-amber">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="badge-system" style="background: rgba(245,158,11,0.2); color: var(--accent-amber); border-color: var(--accent-amber);">TAHAP 2</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">VPN SUPERADMIN</span>
+                    </div>
+                    <div class="card-title">Verifikasi & Rekap Email</div>
+                    <p class="card-text">Superadmin review data ASN, klik "Gunakan Usulan" atau edit manual, lalu klik "Kunci & Rekap Email" via AJAX. Setujui atau Tolak.</p>
+                    <div class="code-block" style="font-size: 0.75rem; color: #fbbf24;">Status: DISETUJUI / DITOLAK</div>
+                </div>
+
+                <div class="card card-green">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span class="badge-system" style="background: rgba(16,185,129,0.2); color: var(--accent-green); border-color: var(--accent-green);">TAHAP 3</span>
+                        <span style="font-size: 0.75rem; color: var(--text-muted);">BSrE BSSN & CRON</span>
+                    </div>
+                    <div class="card-title">Penerbitan & Monitoring</div>
+                    <p class="card-text">Input Nomor Sertifikat BSrE & Tanggal Terbit. Sistem hitung jatuh tempo (+2 Tahun). Cron harian pukul 00:01 WIB scan status H-3 / Expired.</p>
+                    <div class="code-block" style="font-size: 0.75rem; color: #34d399;">Status: AKTIF -> WARNING_H3 -> EXPIRED</div>
+                </div>
+            </div>
+
+            <div class="stat-box" style="display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 12px 20px;">
+                <div style="font-size: 0.85rem; color: var(--text-secondary);">
+                    <strong style="color: #ffffff;">Segregation of Duty:</strong> Verifikasi Tahap 1 (<code style="color: var(--accent-cyan);">verified_by</code>) dan Penerbitan Tahap 2 (<code style="color: var(--accent-cyan);">verified_by_tahap2</code>) dicatat terpisah untuk audit trail forensik.
+                </div>
+                <span class="badge-system">AUDIT TRAIL FORENSIK</span>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Alur bisnis dirancang dalam model 2-tahap yang sangat disiplin: Tahap 1 adalah pendaftaran mandiri oleh ASN publik; Tahap 2 adalah verifikasi dan penguncian email definitif oleh Superadmin via VPN; Tahap 3 adalah pencatatan penerbitan sertifikat BSrE dengan kalkulasi otomatis 2 tahun dan scanning harian status H-3.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 7: FITUR RESILIENSI PELOSOK -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="7">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">06. INOVASI FORMULIR PUBLIK</span>
+                <h2 class="slide-title">Portal Publik Mandiri & Resiliensi Low-Bandwidth</h2>
+            </div>
+            <span class="badge-system">100% ZERO EXTERNAL CDN</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="card card-highlight">
+                    <div class="card-title">⚡ Desain Ramping Tanpa Beban Berkas</div>
+                    <ul class="styled-list">
+                        <li><strong>Bebas Upload File:</strong> Menghapus kewajiban upload berkas SK/KTP puluhan megabyte. Ukuran data pendaftaran teks murni <strong>< 5 KB</strong>.</li>
+                        <li><strong>100% Zero External CDN:</strong> Seluruh font IBM Plex dan styling CSS dibundle lokal di dalam server, portal tetap aktif di jaringan intranet tertutup.</li>
+                        <li><strong>Load Time Cepat:</strong> Terbuka dalam < 2 detik pada koneksi seluler Edge / 2G / 3G kantor kelurahan/kecamatan.</li>
+                    </ul>
+                </div>
+                <div class="card card-green">
+                    <div class="card-title">🛡️ SessionStorage Auto-Save & CAPTCHA Cerdas</div>
+                    <ul class="styled-list">
+                        <li><strong>Auto-Save Aman di sessionStorage:</strong> Draft formulir tersimpan per ketikan keyboard (key: <code style="color: var(--accent-cyan);">tte_registration_draft_temp</code>).</li>
+                        <li><strong>Kepatuhan UU PDP:</strong> Field NIK dan NIP <strong>sengaja tidak disimpan di browser</strong> untuk mencegah kebocoran pada komputer dinas bersama.</li>
+                        <li><strong>Router CAPTCHA Fallback:</strong> reCAPTCHA Google diproteksi timeout 3 detik. Jika lambat/offline, otomatis beralih ke <strong>Local Math CAPTCHA</strong> (HMAC-SHA256).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Inovasi pada formulir publik difokuskan pada resiliensi low-bandwidth di kantor pelosok. Form tidak membebani ASN dengan upload file, menggunakan 100% aset lokal tanpa CDN pihak ketiga, dan auto-save draft ke sessionStorage dengan kepatuhan UU PDP (NIK dan NIP tidak disimpan di browser). Jika Google reCAPTCHA terputus, sistem otomatis menyajikan Local Math CAPTCHA.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 8: GENERATOR & REKAP EMAIL OTOMATIS -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="8">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">07. OTOMASI EMAIL DINAS</span>
+                <h2 class="slide-title">Auto Email Generator & AJAX Recap Widget</h2>
+            </div>
+            <span class="badge-system">@CIREBONKOTA.GO.ID</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="card card-highlight">
+                    <div class="card-title">🤖 Logika Pembangkitan Usulan Otomatis</div>
+                    <p class="card-text">
+                        Sistem menjalankan <code>EmailGeneratorService</code> yang membersihkan karakter khusus, spasi, dan seluruh gelar akademik/keagamaan ASN:
+                    </p>
+                    <div class="code-block">
+Contoh Input: "Dr. H. Ahmad Fauzi, S.Kom., M.Si" (NIP: 198501012010011001)
+Hasil Usulan: ahmad.198501012010011001@cirebonkota.go.id
+Regex Baku  : /^[a-z0-9]+(\.[a-z0-9]+)*$/
+                    </div>
+                </div>
+                <div class="card card-amber">
+                    <div class="card-title">⚡ Interaksi Verifikasi Satu Klik di Panel Admin</div>
+                    <ul class="styled-list">
+                        <li><strong>Tombol "Gunakan Usulan":</strong> Menyalin otomatis usulan email baku ke field email definitif.</li>
+                        <li><strong>Koreksi Manual:</strong> Superadmin dapat mengedit username jika ada kebutuhan nama khusus.</li>
+                        <li><strong>Tombol "Kunci & Rekap":</strong> Eksekusi AJAX instan untuk mengunci <code style="color: var(--accent-cyan);">email_final_terverifikasi</code> dan flag <code style="color: var(--accent-cyan);">is_email_recap_confirmed = true</code>.</li>
+                        <li><strong>Memangkas Waktu:</strong> Dari 15 menit/pemohon menjadi < 1 menit.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Modul email generator menyelesaikan kendala format email yang selama ini tidak seragam. Sistem secara otomatis membersihkan gelar seperti Dr., H., M.Si. dan menyusun usulan baku nama.nip@cirebonkota.go.id. Verifikator cukup klik Gunakan Usulan dan Kunci Rekap Email via AJAX, menghemat waktu proses hingga 90%.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 9: ZERO-TRUST VPN GATEWAY -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="9">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">08. KEAMANAN PERIMETER</span>
+                <h2 class="slide-title">Zero-Trust VPN Gateway & Stealth 404 Defense</h2>
+            </div>
+            <span class="badge-system">PERIMETER LEVEL 0</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="card card-rose">
+                    <div class="card-title">🚪 Penghapusan Login Publik Terbuka</div>
+                    <ul class="styled-list">
+                        <li>Rute login publik konvensional (<code>/login</code>) <strong>dihapus total</strong> dari sistem.</li>
+                        <li>Pintu masuk administrasi dipindahkan ke rute khusus: <code>/gateway/login</code> dan <code>/admin/*</code>.</li>
+                        <li>Diperiksa oleh middleware <code>EnsureVpnAccess</code> terhadap subnet whitelist VPN Diskominfo:
+                            <div class="code-block" style="margin-top: 6px; font-size: 0.78rem;">10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 127.0.0.1/32</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card card-highlight">
+                    <div class="card-title">🕵️ Mekanisme Stealth Block (HTTP 404)</div>
+                    <p class="card-text">
+                        Jika IP publik dari luar VPN mencoba mengakses rute admin, server <strong>TIDAK</strong> mengembalikan 403 Forbidden atau redirect login, melainkan langsung merespons dengan:
+                    </p>
+                    <div class="stat-box" style="text-align: center; border-color: var(--accent-rose);">
+                        <div class="stat-value" style="color: var(--accent-rose);">HTTP 404 Not Found</div>
+                        <div class="stat-label">Halaman Tidak Ditemukan (Stealth Mode)</div>
+                    </div>
+                    <p class="card-text" style="font-size: 0.8rem; margin-top: 6px;">
+                        Penyerang/bot menganggap URL admin tidak ada di server ini (<em>Security through Obscurity + Zero-Trust</em>).
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Keamanan perimeter Zero-Trust adalah benteng terdepan sistem. Kami menghapus rute /login publik dan memindahkannya ke /gateway/login khusus subnet VPN Diskominfo. Jika ada bot atau hacker yang mencoba mengakses dari internet publik, server menjawab dengan status HTTP 404 Not Found murni, sehingga penyerang mengira endpoint admin tersebut fiktif.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 10: ARSITEKTUR DEFENSE-IN-DEPTH -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="10">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">09. KEAMANAN BERLAPIS</span>
+                <h2 class="slide-title">Arsitektur Keamanan Berlapis (Defense-in-Depth)</h2>
+            </div>
+            <span class="badge-system">8 LAYER DEFENSE</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-4" style="gap: 12px;">
+                <div class="card card-highlight" style="padding: 14px;">
+                    <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-cyan);">LAYER 0-1</div>
+                    <div style="font-size: 0.9rem; font-weight: 700; color: #ffffff;">Perimeter & Edge</div>
+                    <p style="font-size: 0.78rem; color: var(--text-secondary);">VPN Subnet Filter, Nginx TLS 1.3, HSTS 2 Tahun, Rate Limit 5r/m & 30r/s.</p>
+                </div>
+                <div class="card card-green" style="padding: 14px;">
+                    <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-green);">LAYER 2-3</div>
+                    <div style="font-size: 0.9rem; font-weight: 700; color: #ffffff;">Aplikasi & Kripto</div>
+                    <p style="font-size: 0.78rem; color: var(--text-secondary);">Sanitasi XSS, CSRF, AES-256-GCM kolom NIK/NIP & HMAC Blind Indexing.</p>
+                </div>
+                <div class="card card-amber" style="padding: 14px;">
+                    <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-amber);">LAYER 4-5</div>
+                    <div style="font-size: 0.9rem; font-weight: 700; color: #ffffff;">IAM & Otorisasi</div>
+                    <p style="font-size: 0.78rem; color: var(--text-secondary);">RFC 6238 TOTP MFA, 8 Backup Codes, Step-Up Auth & Laravel Policies.</p>
+                </div>
+                <div class="card card-purple" style="padding: 14px;">
+                    <div style="font-size: 0.75rem; font-family: var(--font-mono); color: var(--accent-purple);">LAYER 6-7</div>
+                    <div style="font-size: 0.9rem; font-weight: 700; color: #ffffff;">Audit & Container</div>
+                    <p style="font-size: 0.78rem; color: var(--text-secondary);">Async Queue Redis 'audit-logs', Partisi Bulanan PostgreSQL, Non-Root 1000:1000.</p>
+                </div>
+            </div>
+
+            <div class="card" style="background: rgba(15, 23, 42, 0.4); padding: 14px 20px;">
+                <div class="grid-2" style="font-size: 0.82rem; gap: 20px;">
+                    <div>
+                        <strong style="color: var(--accent-cyan);">Kriptografi Kolom Sensitif:</strong>
+                        <div style="color: var(--text-muted); font-family: var(--font-mono); margin-top: 4px;">nik = AES-256-GCM(plaintext, IV, Tag)</div>
+                        <div style="color: var(--text-muted); font-family: var(--font-mono);">nik_hash = HMAC-SHA256(plaintext, APP_KEY)</div>
+                    </div>
+                    <div>
+                        <strong style="color: var(--accent-amber);">Proteksi Akun Superadmin:</strong>
+                        <div style="color: var(--text-muted); margin-top: 4px;">Lockout progresif (5x gagal), TOTP MFA Google Authenticator, dan wajib verifikasi password saat matikan MFA.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Sistem menerapkan 8 lapisan Defense-in-Depth: Dari Layer 0 VPN Gateway, Layer 1 Nginx TLS 1.3, Layer 2-3 Sanitasi dan Kriptografi AES-256-GCM, Layer 4-5 TOTP MFA dan Policy Otorisasi, hingga Layer 6-7 Asynchronous Audit Logging dan Hardening Container Non-Root.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 11: DATABASE CURSOR STREAMING EXPORT -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="11">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">10. EFISIENSI & SKALABILITAS</span>
+                <h2 class="slide-title">Database Cursor Streaming Mass Export Engine</h2>
+            </div>
+            <span class="badge-system">RAM STABIL < 20 MB</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="card card-rose">
+                    <div class="card-title">❌ Ekspor Tradisional (Bahaya OOM)</div>
+                    <ul class="styled-list">
+                        <li>Memuat seluruh data ke memori: <code>PendaftaranTte::with(...)->get()</code>.</li>
+                        <li>Membutuhkan 500 MB – 1 GB RAM untuk 100.000 records.</li>
+                        <li>Memicu <em>Out of Memory / PHP Fatal Error</em> dan server hang.</li>
+                        <li>Rentan badai kueri N+1 pada relasi Eloquent.</li>
+                    </ul>
+                </div>
+                <div class="card card-green">
+                    <div class="card-title">✅ Cursor Streaming Terpadu (Sistem V4.1)</div>
+                    <ul class="styled-list">
+                        <li>Kueri tunggal Join: <code>DB::table()->leftJoin()->cursor()</code>.</li>
+                        <li>Mengalirkan baris demi baris via <code>php://output</code> langsung ke browser.</li>
+                        <li>Konsumsi RAM PHP stabil konstan <strong>< 20 MB</strong> untuk 1.000.000+ baris data.</li>
+                        <li>FastCGI unbuffered Nginx dedicated pada <code>/admin/export/</code>.</li>
+                        <li>Header UTF-8 BOM <code>\xEF\xBB\xBF</code> agar karakter rapi di Microsoft Excel.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Modul ekspor laporan massal telah direkayasa dengan standar memori aman: menggunakan Database Cursor Streaming unbuffered. Dibandingkan sistem lama yang me-load seluruh data ke RAM dan memicu server crash, sistem V4.1 hanya memproses 1 baris per waktu langsung ke browser, menjaga konsumsi RAM stabil di bawah 20 MB untuk jutaan data.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 12: SKEMA BASIS DATA POSTGRESQL 16 -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="12">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">11. STRUKTUR DATA & PARTISI</span>
+                <h2 class="slide-title">Struktur Basis Data PostgreSQL 16 (8 Tabel Normalisasi)</h2>
+            </div>
+            <span class="badge-system">POSTGRESQL 16 ENTERPRISE</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-4" style="font-size: 0.8rem; gap: 10px;">
+                <div class="card" style="padding: 12px;">
+                    <strong style="color: var(--accent-cyan);">1. skpd</strong>
+                    <div style="color: var(--text-muted);">Master 20 unit kerja instansi Kota Cirebon.</div>
+                </div>
+                <div class="card" style="padding: 12px;">
+                    <strong style="color: var(--accent-cyan);">2. master_jabatan_golongan</strong>
+                    <div style="color: var(--text-muted);">Standar jabatan & golongan kepegawaian.</div>
+                </div>
+                <div class="card" style="padding: 12px;">
+                    <strong style="color: var(--accent-cyan);">3. users</strong>
+                    <div style="color: var(--text-muted);">IAM Superadmin + MFA Secret & Backup Codes.</div>
+                </div>
+                <div class="card" style="padding: 12px;">
+                    <strong style="color: var(--accent-cyan);">4. sessions</strong>
+                    <div style="color: var(--text-muted);">Sesi login database terenkripsi.</div>
+                </div>
+                <div class="card" style="padding: 12px;">
+                    <strong style="color: var(--accent-green);">5. pendaftaran_tte</strong>
+                    <div style="color: var(--text-muted);">Transaksi permohonan, AES NIK/NIP, rekap email.</div>
+                </div>
+                <div class="card" style="padding: 12px;">
+                    <strong style="color: var(--accent-green);">6. sertifikat_tte</strong>
+                    <div style="color: var(--text-muted);">Sertifikat BSrE aktif, jatuh tempo +2 th, H-3 scan.</div>
+                </div>
+                <div class="card" style="padding: 12px;">
+                    <strong style="color: var(--accent-amber);">7. dashboard_daily_stats</strong>
+                    <div style="color: var(--text-muted);">Fast counter agregat harian menyuplai Redis.</div>
+                </div>
+                <div class="card" style="padding: 12px;">
+                    <strong style="color: var(--accent-purple);">8. security_audit_logs</strong>
+                    <div style="color: var(--text-muted);">Partisi bulanan native + default fallback.</div>
+                </div>
+            </div>
+
+            <div class="card card-highlight" style="padding: 12px 18px;">
+                <div class="grid-2" style="font-size: 0.82rem;">
+                    <div>
+                        <strong style="color: #ffffff;">Partial Unique Indexing:</strong>
+                        <div style="color: var(--text-muted); font-family: var(--font-mono); margin-top: 2px;">
+                            CREATE UNIQUE INDEX ... (nik_hash) WHERE status != 'DITOLAK';
+                        </div>
+                        <div style="color: var(--text-secondary); margin-top: 2px;">Mengizinkan ASN yang ditolak untuk mendaftar ulang baris baru secara mandiri.</div>
+                    </div>
+                    <div>
+                        <strong style="color: #ffffff;">Monthly Partitioning & Default Fallback:</strong>
+                        <div style="color: var(--text-muted); font-family: var(--font-mono); margin-top: 2px;">
+                            security_audit_logs_default PARTITION OF ... DEFAULT;
+                        </div>
+                        <div style="color: var(--text-secondary); margin-top: 2px;">Menjamin log audit tidak pernah error meski partisi bulanan baru belum di-generate.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Skema database dinormalisasi ke dalam 8 tabel utama tanpa tabel upload berkas fisik. Keunggulan teknisnya mencakup Partial Unique Index yang mengizinkan ASN mendaftar ulang jika permohonan ditolak, serta Range Partitioning bulanan pada security_audit_logs yang dilengkapi partisi default fallback.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 13: HASIL REMEDIASI AUDIT 4 PILAR -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="13">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">12. EVALUASI KUALITAS KODE</span>
+                <h2 class="slide-title">Hasil Evaluasi & Remediasi Audit Kode Program 4 Pilar</h2>
+            </div>
+            <span class="badge-system" style="background: rgba(16,185,129,0.2); color: var(--accent-green); border-color: var(--accent-green);">100% REMEDIASI TUNTAS</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="card card-highlight">
+                    <div class="card-title">🛡️ Pilar I: Keamanan & Privasi Data</div>
+                    <ul class="styled-list" style="font-size: 0.85rem;">
+                        <li><strong>Temuan 1 (Kritis):</strong> PII NIK/NIP di localStorage browser klien.</li>
+                        <li><strong>Hasil Perbaikan:</strong> Dialihkan ke <code>sessionStorage</code> (key: <code>tte_registration_draft_temp</code>) tanpa menyimpan NIK/NIP mentah, auto-clear saat submit (Kepatuhan UU PDP).</li>
+                    </ul>
+                </div>
+                <div class="card card-amber">
+                    <div class="card-title">🔑 Pilar II: IAM & Kebijakan Otorisasi</div>
+                    <ul class="styled-list" style="font-size: 0.85rem;">
+                        <li><strong>Temuan 2 & 3 (Kritis/Tinggi):</strong> Absensi step-up auth saat matikan MFA & gagal simpan recovery codes.</li>
+                        <li><strong>Hasil Perbaikan:</strong> Wajib verifikasi <code>current_password</code>, persistensi 8 backup recovery codes terenkripsi, penegakan Laravel Policies di seluruh controller.</li>
+                    </ul>
+                </div>
+                <div class="card card-green">
+                    <div class="card-title">⚡ Pilar III: Kinerja Basis Data</div>
+                    <ul class="styled-list" style="font-size: 0.85rem;">
+                        <li><strong>Temuan 5 & 6 (Tinggi/Sedang):</strong> Potensi badai N+1 pada ekspor & ketiadaan partisi fallback.</li>
+                        <li><strong>Hasil Perbaikan:</strong> Single query <code>leftJoin()->cursor()</code> bebas N+1 & penambahan partisi default <code>security_audit_logs_default</code>.</li>
+                    </ul>
+                </div>
+                <div class="card card-purple">
+                    <div class="card-title">⚙️ Pilar IV: Infrastruktur & Kode Bersih</div>
+                    <ul class="styled-list" style="font-size: 0.85rem;">
+                        <li><strong>Temuan 7-11:</strong> Inkonsistensi regex email, DRY error handler, unbuffered Nginx.</li>
+                        <li><strong>Hasil Perbaikan:</strong> Regex tersinkronisasi, closure <code>$jsonResponder</code> terpadu, dan strict Docker secret enforcement (<code>${DB_PASSWORD:?...}</code>).</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Audit menyeluruh 4 pilar telah menghasilkan 11 temuan perbaikan yang telah dituntaskan 100%. Mulai dari eliminasi NIK/NIP di storage browser klien, penguatan otorisasi MFA dengan step-up auth, eliminasi badai kueri N+1 pada ekspor, hingga penyelarasan konfigurasi Nginx dan Docker Compose. Sistem telah 100% production-ready.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 14: PANDUAN OPERASIONAL & TROUBLESHOOTING -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="14">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">13. PEMELIHARAAN & DEPLOYMENT</span>
+                <h2 class="slide-title">Panduan Operasional & Mitigasi Error (E-01 s/d E-12)</h2>
+            </div>
+            <span class="badge-system">DOCKER PRODUCTION READY</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="card card-highlight">
+                    <div class="card-title">🚀 Prosedur Deployment Standar</div>
+                    <div class="code-block" style="font-size: 0.76rem; line-height: 1.4;">
+# 1. Start Stack Kontainer
+docker compose up -d --build
+
+# 2. Inisialisasi Database & Cache
+docker compose exec app php artisan migrate --seed --force
+docker compose exec app php artisan config:cache
+docker compose exec app php artisan route:cache
+
+# 3. Crontab Host Server Linux (Scheduler)
+* * * * * cd /path/to/sismon-tte-testing-V4 && docker compose exec -T app php artisan schedule:run >> /dev/null 2>&1
+                    </div>
+                </div>
+                <div class="card card-amber">
+                    <div class="card-title">🔧 Diagnosis Cepat Error Operasional</div>
+                    <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.8rem;">
+                        <div><strong style="color: var(--accent-rose);">E-02 (404 pada /admin):</strong> IP Klien di luar subnet VPN. Hubungkan ke VPN Diskominfo atau update <code>VPN_ALLOWED_SUBNETS</code> di .env.</div>
+                        <div><strong style="color: var(--accent-rose);">E-06 (Redis Auth Error):</strong> Pastikan <code>REDIS_PASSWORD</code> di .env cocok dengan <code>--requirepass</code> di compose.</div>
+                        <div><strong style="color: var(--accent-rose);">E-09 (MFA Lockout):</strong> Reset MFA via Tinker: <code>App\Models\User::first()->update(['is_mfa_enabled'=>false]);</code></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Panduan operasional menyajikan perintah deployment ringkas satu baris menggunakan Docker Compose, konfigurasi cron scheduler untuk lifecycle scanner 00:01 WIB, dan matriks mitigasi 12 kode error operasional dari E-01 hingga E-12 untuk kemudahan tim IT Diskominfo.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 15: PEMETAAN RUTE & KREDENSIAL DEFAULT -->
+    <!-- ========================================== -->
+    <div class="slide" data-slide="15">
+        <div class="slide-header">
+            <div class="slide-title-area">
+                <span class="slide-category">14. PEMETAAN AKSES RESMI</span>
+                <h2 class="slide-title">Pemetaan Rute Sistem & Kredensial Akun Default</h2>
+            </div>
+            <span class="badge-system">SEEDED ACCOUNTS</span>
+        </div>
+        <div class="slide-body">
+            <div class="grid-2">
+                <div class="card card-highlight">
+                    <div class="card-title">🌐 Pemetaan Rute Web Resmi</div>
+                    <table class="table-custom" style="font-size: 0.78rem;">
+                        <thead>
+                            <tr><th>Rute URL</th><th>Akses</th><th>Fungsi</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>/</code></td><td>Publik</td><td>Formulir Mandiri ASN</td></tr>
+                            <tr><td><code>/gateway/login</code></td><td>VPN</td><td>Login Superadmin</td></tr>
+                            <tr><td><code>/admin/dashboard</code></td><td>VPN+Auth</td><td>Analytics Fast Counter</td></tr>
+                            <tr><td><code>/admin/verifikasi</code></td><td>VPN+Auth</td><td>Antrean Tahap 1 & Rekap</td></tr>
+                            <tr><td><code>/admin/penerbitan</code></td><td>VPN+Auth</td><td>Penerbitan Tahap 2 BSrE</td></tr>
+                            <tr><td><code>/admin/export/csv</code></td><td>VPN+Auth</td><td>Mass Streaming Export</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card card-green">
+                    <div class="card-title">👤 Kredensial Akun Default (Hasil Seeder)</div>
+                    <table class="table-custom" style="font-size: 0.78rem;">
+                        <thead>
+                            <tr><th>Nama Akun</th><th>Email Login</th><th>Peran</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Superadmin Utama</strong></td>
+                                <td><code>admin@cirebonkota.go.id</code></td>
+                                <td>Superadmin</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Akun Penguji</strong></td>
+                                <td><code>ajriajundan@gmail.com</code></td>
+                                <td>Superadmin</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Operator Sandi</strong></td>
+                                <td><code>operator@cirebonkota.go.id</code></td>
+                                <td>Superadmin</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
+                        *Password default dicatat aman pada dokumentasi internal & wajib diubah saat deployment ke server produksi.
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="display: none;" class="notes">
+            Slide ini memetakan seluruh rute publik vs rute terisolasi VPN Gateway, serta akun default operasional yang digenerate oleh DatabaseSeeder untuk keperluan pengujian dan verifikasi lapangan.
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- SLIDE 16: KESIMPULAN & PENUTUP -->
+    <!-- ========================================== -->
+    <div class="slide slide-cover" data-slide="16">
+        <div class="cover-badge" style="background: rgba(16,185,129,0.1); border-color: var(--accent-green); color: var(--accent-green);">STATUS: PRODUCTION READY</div>
+        <h1 class="cover-title" style="font-size: 2.2rem;">SISTEM SIAP BEROPERASI SECARA <span>STABIL, EFISIEN & AMAN</span></h1>
+        <p class="cover-subtitle" style="font-size: 1.05rem; max-width: 850px;">
+            Sistem Monitoring Penerbitan TTE & Pelayanan Email Dinas Resmi V4.1 Pemerintah Kota Cirebon telah memenuhi seluruh standar kepatuhan SPBE, regulasi UU PDP No. 27/2022, standar BSSN, dan hasil audit kode program 4 pilar.
+        </p>
+
+        <div class="grid-3" style="max-width: 850px; margin-top: 10px; text-align: left;">
+            <div class="card card-highlight" style="padding: 14px;">
+                <strong style="color: #ffffff; font-size: 0.85rem;">🛡️ Berdaulat & Terenkripsi</strong>
+                <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px;">Data tersimpan on-premise di PostgreSQL 16 dengan proteksi AES-256-GCM.</p>
+            </div>
+            <div class="card card-green" style="padding: 14px;">
+                <strong style="color: #ffffff; font-size: 0.85rem;">⚡ Resiliensi Low-Bandwidth</strong>
+                <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px;">100% Zero-CDN & form tanpa upload file < 5KB untuk ASN di kantor pelosok.</p>
+            </div>
+            <div class="card card-amber" style="padding: 14px;">
+                <strong style="color: #ffffff; font-size: 0.85rem;">🔒 Zero-Trust VPN Gateway</strong>
+                <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 4px;">Panel administratif terisolasi penuh dari ancaman bot internet publik.</p>
+            </div>
+        </div>
+
+        <div class="cover-meta" style="margin-top: 30px;">
+            <div>HAK CIPTA © 2026 <strong>DISKOMINFO / BIDANG PERSANDIAN KOTA CIREBON</strong></div>
+        </div>
+        <div style="display: none;" class="notes">
+            Sebagai penutup, sistem ini telah siap 100% digunakan untuk melayani seluruh ASN di Pemerintah Kota Cirebon. Terima kasih atas perhatian bapak/ibu sekalian. Kami membuka sesi tanya jawab dan diskusi teknis lebih lanjut.
+        </div>
+    </div>
+
+</div>
+
+<!-- Bottom Navigation Bar -->
+<div class="bottom-bar">
+    <div class="bar-left">
+        <span>DISKOMINFO KOTA CIREBON</span>
+        <span>•</span>
+        <span style="color: var(--accent-cyan);">TTE & EMAIL DINAS V4.1</span>
+    </div>
+
+    <div class="bar-center">
+        <button class="nav-btn" id="prevBtn" onclick="prevSlide()">❮ Prev</button>
+        <span class="slide-counter" id="slideIndicator">1 / 16</span>
+        <button class="nav-btn" id="nextBtn" onclick="nextSlide()">Next ❯</button>
+        <button class="nav-btn" id="notesBtn" onclick="toggleNotes()">📝 Notes (N)</button>
+        <button class="nav-btn" onclick="window.print()">🖨️ Print / PDF</button>
+        <button class="nav-btn" onclick="toggleFullScreen()">⛶ Fullscreen (F)</button>
+    </div>
+
+    <div class="key-hints">
+        <span>Navigasi:</span>
+        <span class="key-badge">←</span>
+        <span class="key-badge">→</span>
+        <span class="key-badge">Space</span>
+    </div>
+</div>
+
+<!-- Speaker Notes Panel -->
+<div class="speaker-notes-panel" id="speakerNotesPanel">
+    <div class="notes-title">
+        <span>🎙️ Catatan Pemateri (Speaker Notes)</span>
+        <button onclick="toggleNotes()" style="background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1rem;">✕</button>
+    </div>
+    <div class="notes-content" id="speakerNotesContent">
+        Memuat catatan pemateri...
+    </div>
+</div>
+
+<script>
+    let currentSlideIndex = 1;
+    const totalSlides = document.querySelectorAll('.slide').length;
+
+    function showSlide(index) {
+        if (index < 1) index = 1;
+        if (index > totalSlides) index = totalSlides;
+
+        currentSlideIndex = index;
+
+        document.querySelectorAll('.slide').forEach((slide, idx) => {
+            if (idx + 1 === currentSlideIndex) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+
+        // Update Counter
+        document.getElementById('slideIndicator').textContent = `${currentSlideIndex} / ${totalSlides}`;
+
+        // Update Progress Bar
+        const progressPercent = ((currentSlideIndex - 1) / (totalSlides - 1)) * 100;
+        document.getElementById('progressBar').style.width = `${progressPercent}%`;
+
+        // Update Speaker Notes
+        const activeSlide = document.querySelector(`.slide[data-slide="${currentSlideIndex}"]`);
+        const notesElem = activeSlide ? activeSlide.querySelector('.notes') : null;
+        const notesPanelContent = document.getElementById('speakerNotesContent');
+        if (notesElem) {
+            notesPanelContent.innerHTML = `<p>${notesElem.innerHTML.trim()}</p>`;
+        } else {
+            notesPanelContent.innerHTML = `<p style="color: var(--text-muted); font-style: italic;">Tidak ada catatan khusus untuk slide ini.</p>`;
+        }
+
+        // Update button states
+        document.getElementById('prevBtn').disabled = (currentSlideIndex === 1);
+        document.getElementById('nextBtn').disabled = (currentSlideIndex === totalSlides);
+    }
+
+    function nextSlide() {
+        if (currentSlideIndex < totalSlides) {
+            showSlide(currentSlideIndex + 1);
+        }
+    }
+
+    function prevSlide() {
+        if (currentSlideIndex > 1) {
+            showSlide(currentSlideIndex - 1);
+        }
+    }
+
+    function toggleNotes() {
+        const panel = document.getElementById('speakerNotesPanel');
+        panel.classList.toggle('open');
+    }
+
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                console.log(`Error attempting to enable full-screen mode: ${err.message}`);
+            });
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault();
+            nextSlide();
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            prevSlide();
+        } else if (e.key === 'f' || e.key === 'F') {
+            toggleFullScreen();
+        } else if (e.key === 'n' || e.key === 'N') {
+            toggleNotes();
+        } else if (e.key === 'Home') {
+            showSlide(1);
+        } else if (e.key === 'End') {
+            showSlide(totalSlides);
+        }
+    });
+
+    // Initialize
+    showSlide(1);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+/**
+ * IBM Plex Typography System — Zero External CDN
+ * Diskominfo Kota Cirebon Monitoring TTE & Email Dinas
+ * Ref: DESIGN.md §3, SECURITY.md §9.1
+ */
+
+@font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('IBM Plex Sans'), local('IBMPlexSans'), local('Segoe UI'), local('Roboto');
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: local('IBM Plex Sans Medium'), local('IBMPlexSans-Medium'), local('Segoe UI Semibold');
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: local('IBM Plex Sans SemiBold'), local('IBMPlexSans-SemiBold'), local('Segoe UI Bold');
+}
+
+@font-face {
+    font-family: 'IBM Plex Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('IBM Plex Sans Bold'), local('IBMPlexSans-Bold'), local('Arial Bold');
+}
+
+@font-face {
+    font-family: 'IBM Plex Mono';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('IBM Plex Mono'), local('IBMPlexMono'), local('Consolas'), local('SFMono-Regular');
+}
+
+@font-face {
+    font-family: 'IBM Plex Mono';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: local('IBM Plex Mono SemiBold'), local('IBMPlexMono-SemiBold'), local('Consolas Bold');
+}
