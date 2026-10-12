@@ -1,7 +1,7 @@
 # PANDUAN OPERASIONAL & DEPLOYMENT SISTEM MONITORING TTE KOTA CIREBON
 
 **Dokumen:** Panduan Operasional Sistem & Standard Operating Procedure (SOP)  
-**Instansi:** Dinas Komunikasi dan Informatika / Bidang Persandian Kota Cirebon  
+**Instansi:** Dinas Komunikasi, Informatika, dan Statistik Kota Cirebon (DKIS Kota Cirebon) / Bidang Persandian  
 **Arsitektur:** Clean Domain Architecture (Laravel 13, PostgreSQL 16 Alpine, Redis 7, Nginx Hardened, VPN Gateway)  
 **Versi Dokumen:** 3.2.0-PROD  
 **Klasifikasi:** Internal Pemerintah Kota Cirebon  

@@ -8,7 +8,7 @@
     <div>
         <h1 class="panel-title">Manajemen Akun Internal & Keamanan IAM</h1>
         <p style="font-size: 0.8125rem; color: var(--ink-muted); margin-top: 2px;">
-            Pengelolaan hak akses Superadmin Bidang Persandian Diskominfo Kota Cirebon dan aktivasi Multi-Factor Authentication (TOTP).
+            Pengelolaan hak akses Superadmin Bidang Persandian DKIS Kota Cirebon dan aktivasi Multi-Factor Authentication (TOTP).
         </p>
     </div>
 

@@ -25,7 +25,7 @@
                         Pemerintah Kota Cirebon
                     </div>
                     <div style="font-size: 0.75rem; color: #a8a8a8;">
-                        Dinas Komunikasi dan Informatika · Bidang Persandian
+                        Dinas Komunikasi, Informatika, dan Statistik (DKIS) · Bidang Persandian
                     </div>
                 </div>
             </div>
@@ -68,7 +68,7 @@
     <footer style="background-color: var(--canvas); border-top: 1px solid var(--hairline); padding: 1.5rem 1rem; text-align: center; font-size: 0.75rem; color: var(--ink-muted);">
         <div style="max-width: 1000px; margin: 0 auto;">
             <p><strong>Sistem Monitoring Penerbitan TTE & Pelayanan Email Dinas Resmi</strong></p>
-            <p style="margin-top: 0.25rem;">© {{ date('Y') }} Dinas Komunikasi dan Informatika Kota Cirebon. Hak Cipta Dilindungi.</p>
+            <p style="margin-top: 0.25rem;">© {{ date('Y') }} Dinas Komunikasi, Informatika, dan Statistik (DKIS) Kota Cirebon. Hak Cipta Dilindungi.</p>
         </div>
     </footer>
 

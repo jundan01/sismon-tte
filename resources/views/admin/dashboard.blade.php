@@ -208,7 +208,7 @@
                 @if($sortMode === 'persentase')
                     Diurutkan berdasarkan persentase capaian adopsi TTE terhadap total pegawai ASN
                 @else
-                    Diurutkan berdasarkan volume absolut permohonan masuk ke Diskominfo
+                    Diurutkan berdasarkan volume absolut permohonan masuk ke DKIS Kota Cirebon
                 @endif
             </div>
         </div>

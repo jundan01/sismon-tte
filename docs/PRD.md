@@ -1,7 +1,7 @@
 # PRD.md — Product Requirements Document
 
 **Produk:** Sistem Dashboard Monitoring TTE & Pelayanan Email Dinas  
-**Instansi:** Dinas Komunikasi dan Informatika / Bidang Persandian  
+**Instansi:** Dinas Komunikasi, Informatika, dan Statistik Kota Cirebon (DKIS Kota Cirebon) / Bidang Persandian  
 **Domain Resmi Email Dinas:** `@cirebonkota.go.id`  
 **Target Skalabilitas:** 100.000 – 1.000.000+ Records (Enterprise Skala Nasional)  
 **Target Lingkungan:** Ramah Daerah Terpencil (*Low Connectivity / High Latency* 2G/3G/Edge) & Cloud IDE (Antigravity)  
@@ -16,7 +16,7 @@
 > 1. **Peningkatan Skalabilitas & Stack Framework:** Mengadopsi **Laravel 13** dan **PostgreSQL 16 Enterprise** dengan kapasitas olah data 100.000 hingga 1.000.000+ records ASN.
 > 2. **Isolasi Jalur Masuk Admin Berbasis VPN Gateway (Zero-Trust Network Segmentation):**
 >    - Menghapus rute login admin dari rute publik terbuka (`/login`).
->    - Memindahkan seluruh pintu masuk autentikasi dan panel kendali Superadmin ke jalur terproteksi (`/gateway/login` dan `/admin/*`) yang hanya dapat diakses melalui **VPN Gateway / Intranet Diskominfo** dengan verifikasi IP Subnet CIDR (`EnsureVpnAccess`).
+>    - Memindahkan seluruh pintu masuk autentikasi dan panel kendali Superadmin ke jalur terproteksi (`/gateway/login` dan `/admin/*`) yang hanya dapat diakses melalui **VPN Gateway / Intranet DKIS Kota Cirebon** dengan verifikasi IP Subnet CIDR (`EnsureVpnAccess`).
 >    - Seluruh permintaan dari internet publik ke rute admin akan menghasilkan respon *Stealth Mode* (HTTP 404 Not Found) untuk mengeliminasi surface reconnaissance dan brute-force.
 > 3. **Standardisasi Domain Email:** Mempertahankan dan menegakkan domain resmi **`@cirebonkota.go.id`** untuk seluruh ASN pendaftar.
 > 4. **Alur Fleksibel Penetapan Email Dinas oleh Superadmin:**

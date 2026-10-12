@@ -85,7 +85,7 @@
                     <!-- Status VPN Gateway -->
                     <div style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; background: #e8f5e9; border: 1px solid #24a148; color: #0e6027; font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.02em;">
                         <span style="display: inline-block; width: 6px; height: 6px; background: #24a148;"></span>
-                        VPN DISKOMINFO TERVERIFIKASI
+                        VPN DKIS TERVERIFIKASI
                     </div>
 
                     <div style="font-size: 0.75rem; color: var(--ink-secondary); font-family: 'IBM Plex Mono', monospace;">

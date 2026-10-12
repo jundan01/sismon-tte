@@ -8,7 +8,7 @@
 [![Design System](https://img.shields.io/badge/Design-Carbon%20Flat%200px-0f62fe.svg)]()
 [![Architecture](https://img.shields.io/badge/Architecture-Clean%20Domain%20Driven-161616.svg)]()
 
-Aplikasi web enterprise yang dikembangkan khusus untuk **Dinas Komunikasi dan Informatika (Diskominfo) / Bidang Persandian Pemerintah Kota Cirebon**. Sistem ini mengelola siklus operasional permohonan sertifikat Tanda Tangan Elektronik (TTE) Balai Sertifikasi Elektronik (BSrE), standarisasi dan rekapitulasi akun email dinas resmi (`@cirebonkota.go.id`), verifikasi berkas dua tahap, pemantauan masa berlaku 2 tahun dengan peringatan dini (H-7 Warning Zone), analitik capaian adopsi 20 SKPD Kota Cirebon, ekspor streaming unbuffered hemat memori, serta perlindungan perimeter **Zero-Trust VPN Gateway** dengan mode siluman (*Stealth Defense 404*).
+Aplikasi web enterprise yang dikembangkan khusus untuk **Dinas Komunikasi, Informatika, dan Statistik Kota Cirebon (DKIS Kota Cirebon) / Bidang Persandian**. Sistem ini mengelola siklus operasional permohonan sertifikat Tanda Tangan Elektronik (TTE) Balai Sertifikasi Elektronik (BSrE), standarisasi dan rekapitulasi akun email dinas resmi (`@cirebonkota.go.id`), verifikasi berkas dua tahap, pemantauan masa berlaku 2 tahun dengan peringatan dini (H-7 Warning Zone), analitik capaian adopsi 20 SKPD Kota Cirebon, ekspor streaming unbuffered hemat memori, serta perlindungan perimeter **Zero-Trust VPN Gateway** dengan mode siluman (*Stealth Defense 404*).
 
 ---
 
@@ -110,7 +110,7 @@ graph TD
         ASN[Browser ASN Pemohon]
     end
 
-    subgraph Internal Jaringan Diskominfo
+    subgraph Internal Jaringan DKIS Kota Cirebon
         AdminVPN[Superadmin / Verifikator via Subnet 10.x / 172.x]
     end
 
@@ -154,7 +154,7 @@ graph TD
 Sistem diinisialisasi dengan master data resmi yang merepresentasikan struktur organisasi Pemerintah Kota Cirebon:
 
 - **20 Satuan Kerja Perangkat Daerah (SKPD):**
-  Dinas Komunikasi dan Informatika (45 ASN), Bappeda (55 ASN), BPKAD (65 ASN), BKPSDM (50 ASN), Dinas Kesehatan (120 ASN), Dinas Pendidikan (200 ASN), DPUPR (85 ASN), Dishub (60 ASN), Dinsos P3A (40 ASN), Dinperkim (50 ASN), DLHK (75 ASN), Disdukcapil (55 ASN), DPMPTSP (40 ASN), Dinperin (35 ASN), Inspektorat (30 ASN), Setda (90 ASN), Setwan (35 ASN), Kecamatan Lemahwungkuk (25 ASN), Kecamatan Kejaksan (25 ASN), dan Kecamatan Pekalipan (20 ASN).
+  Dinas Komunikasi, Informatika, dan Statistik (DKIS: 45 ASN), Bappeda (55 ASN), BPKAD (65 ASN), BKPSDM (50 ASN), Dinas Kesehatan (120 ASN), Dinas Pendidikan (200 ASN), DPUPR (85 ASN), Dishub (60 ASN), Dinsos P3A (40 ASN), Dinperkim (50 ASN), DLHK (75 ASN), Disdukcapil (55 ASN), DPMPTSP (40 ASN), Dinperin (35 ASN), Inspektorat (30 ASN), Setda (90 ASN), Setwan (35 ASN), Kecamatan Lemahwungkuk (25 ASN), Kecamatan Kejaksan (25 ASN), dan Kecamatan Pekalipan (20 ASN).
 - **10 Master Jabatan ASN:** Kepala Dinas, Sekretaris Dinas, Kepala Bidang, Kepala Seksi, Kasubag, Analis Kebijakan, Pranata Komputer, Sandiman, Fungsional Umum, Staf.
 - **17 Master Golongan/Pangkat:** Golongan I/a s/d IV/e lengkap dengan nama pangkat resmi.
 
@@ -317,7 +317,7 @@ stdout_logfile=/var/log/tte-worker.log
 ### 2. Kredensial Akun Default (Hasil Seeder)
 | Nama Akun | Email Login | Password Default | Role | Keterangan |
 | :--- | :--- | :--- | :---: | :--- |
-| **Superadmin Utama** | `admin@cirebonkota.go.id` | `SuperAdmin2026!@#` | `superadmin` | Akun resmi operasional Diskominfo |
+| **Superadmin Utama** | `admin@cirebonkota.go.id` | `SuperAdmin2026!@#` | `superadmin` | Akun resmi operasional DKIS Kota Cirebon |
 | **Akun Penguji** | `ajriajundan@gmail.com` | `Jundan12012005!@#` | `superadmin` | Akun pengujian & audit sistem |
 | **Operator Persandian** | `operator@cirebonkota.go.id` | `Operator!2026#Sandi` | `superadmin` | Operator verifikasi berkas |
 
@@ -330,7 +330,7 @@ stdout_logfile=/var/log/tte-worker.log
 
 | Kode | Gejala / Pesan Error | Akar Masalah (*Root Cause*) | Solusi & Tindakan Perbaikan |
 | :---: | :--- | :--- | :--- |
-| **E-01** | `Error 404 Not Found` saat buka `/gateway/login` atau `/admin/*` | Akses berasal dari IP di luar subnet VPN (*Stealth Defense*) | 1. Pastikan perangkat terhubung ke VPN Diskominfo.<br>2. Atau tambahkan IP Anda ke `.env`: `VPN_ALLOWED_SUBNETS="127.0.0.1/32,IP_ANDA/32"` lalu `php artisan config:clear`. |
+| **E-01** | `Error 404 Not Found` saat buka `/gateway/login` atau `/admin/*` | Akses berasal dari IP di luar subnet VPN (*Stealth Defense*) | 1. Pastikan perangkat terhubung ke VPN DKIS Kota Cirebon.<br>2. Atau tambahkan IP Anda ke `.env`: `VPN_ALLOWED_SUBNETS="127.0.0.1/32,IP_ANDA/32"` lalu `php artisan config:clear`. |
 | **E-02** | `InvalidArgumentException: Please provide a valid cache path` | Direktori `storage/framework` belum ada | Buat direktori: `mkdir -p storage/framework/{views,sessions,cache} storage/logs` dan `chmod -R 775 storage bootstrap/cache`. |
 | **E-03** | `bind: address already in use` saat start container | Port 80, 443, 5432, atau 6379 digunakan layanan lain | Matikan web server host lokal (IIS/Apache/XAMPP) atau ubah port mapping pada `.env` (`HTTP_PORT=8080`, `APP_PORT=8443`). |
 | **E-04** | `SQLSTATE[08006] could not connect to server` | PostgreSQL belum siap atau nama host salah | Pastikan container postgres berstatus Up. Gunakan `DB_HOST=postgres` dalam Docker atau `DB_HOST=127.0.0.1` di luar Docker. |
@@ -398,5 +398,5 @@ Untuk spesifikasi mendalam dan catatan evaluasi teknis, silakan merujuk pada ber
 
 ## 🛡️ Lisensi & Hak Cipta
 
-Hak Cipta © 2026 **Dinas Komunikasi dan Informatika / Bidang Persandian Pemerintah Kota Cirebon**.  
+Hak Cipta © 2026 **Dinas Komunikasi, Informatika, dan Statistik (DKIS Kota Cirebon) / Bidang Persandian**.  
 Seluruh hak cipta dilindungi undang-undang.

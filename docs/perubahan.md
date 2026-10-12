@@ -2,7 +2,7 @@
 ## UPGRADE KE LARAVEL 13 & ISOLASI JALUR ADMIN BERBASIS VPN GATEWAY
 
 **Proyek:** Sistem Dashboard Monitoring TTE & Pelayanan Email Dinas (`@cirebonkota.go.id`)  
-**Instansi:** Dinas Komunikasi dan Informatika / Bidang Persandian Kota Cirebon  
+**Instansi:** Dinas Komunikasi, Informatika, dan Statistik Kota Cirebon (DKIS Kota Cirebon) / Bidang Persandian  
 **Versi Rilis:** 3.1.0-PROD (Enterprise Upgrade & Zero-Trust VPN Gateway)  
 **Tanggal Pembaruan:** 19 Agustus 2026  
 **Dokumen:** `perubahan.md`  

@@ -1,6 +1,6 @@
 # PANDUAN LENGKAP PRESENTASI & SLIDE DECK (PPT)
 ## SISTEM MONITORING PENERBITAN TTE & PELAYANAN EMAIL DINAS RESMI
-### PEMERINTAH KOTA CIREBON (DISKOMINFO / BIDANG PERSANDIAN)
+### PEMERINTAH KOTA CIREBON (DKIS KOTA CIREBON / BIDANG PERSANDIAN)
 
 **Versi Sistem:** 3.2.0-PROD / Release V4.1 (Post-Audit Hardened Skala Nasional)  
 **File Presentasi PowerPoint:** [`presentasi_sistem_tte.pptx`](file:///f:/sismon-tte-testing-V4/presentasi_sistem_tte.pptx)  

@@ -191,7 +191,7 @@ components:
 # DESIGN.md — Spesifikasi Desain Antarmuka Sistem
 
 **Proyek:** Sistem Dashboard Monitoring TTE & Pelayanan Email Dinas  
-**Instansi:** Dinas Komunikasi dan Informatika / Bidang Persandian  
+**Instansi:** Dinas Komunikasi, Informatika, dan Statistik Kota Cirebon (DKIS Kota Cirebon) / Bidang Persandian  
 **Domain Resmi Email Dinas:** `@cirebonkota.go.id`  
 **Dokumen Terkait:** [PRD.md](file:///f:/sismon-tte-testing-V4/docs/PRD.md) v3.2.0-PROD, [ARCHITECTURE.md](file:///f:/sismon-tte-testing-V4/docs/ARCHITECTURE.md) v3.2.0-PROD, [SCHEMA.md](file:///f:/sismon-tte-testing-V4/docs/SCHEMA.md) v3.2.0-PROD, [SECURITY.md](file:///f:/sismon-tte-testing-V4/docs/SECURITY.md) v3.2.0-PROD, [OPERATIONAL_GUIDE.md](file:///f:/sismon-tte-testing-V4/docs/OPERATIONAL_GUIDE.md) v3.2.0-PROD, [solusi_audit.md](file:///f:/sismon-tte-testing-V4/solusi_audit.md)  
 **Versi Dokumen:** 3.2.0-PROD  

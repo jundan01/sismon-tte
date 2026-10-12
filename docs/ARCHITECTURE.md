@@ -1,7 +1,7 @@
 # ARCHITECTURE.md — Spesifikasi Arsitektur Sistem
 
 **Proyek:** Sistem Dashboard Monitoring TTE & Pelayanan Email Dinas  
-**Instansi:** Dinas Komunikasi dan Informatika / Bidang Persandian  
+**Instansi:** Dinas Komunikasi, Informatika, dan Statistik Kota Cirebon (DKIS Kota Cirebon) / Bidang Persandian  
 **Domain Resmi Email Dinas:** `@cirebonkota.go.id`  
 **Target Skalabilitas:** 100.000 – 1.000.000+ Records (Enterprise Skala Nasional)  
 **Core Stack:** PHP 8.3 / Laravel 13 + PostgreSQL 16 + Redis 7 + Nginx + Docker Compose  
@@ -28,7 +28,7 @@ Sistem Dashboard Monitoring TTE & Pelayanan Email Dinas dibangun dengan arsitekt
 ### 1.1 Diagram Topologi Kontainer & Segmentasi Jaringan
 
 ```
-   [ JALUR PUBLIK (INTERNET) ]              [ JALUR INTERNAL (DISKOMINFO VPN) ]
+   [ JALUR PUBLIK (INTERNET) ]              [ JALUR INTERNAL (DKIS VPN) ]
      (ASN Pemohon Layanan TTE)                  (Superadmin / Operator Sandi)
                 │                                            │
                 │                                            ▼

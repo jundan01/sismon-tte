@@ -100,7 +100,7 @@ class VpnGatewaySecurityTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertSee('Dashboard Transaksi');
-        $response->assertSee('VPN DISKOMINFO TERVERIFIKASI');
+        $response->assertSee('VPN DKIS TERVERIFIKASI');
     }
 
     public function test_vpn_protection_can_be_disabled_via_configuration(): void

@@ -1,6 +1,6 @@
 # DOKUMEN PENJELASAN KOMPREHENSIF SISTEM
 ## SISTEM MONITORING PENERBITAN TTE & PELAYANAN EMAIL DINAS RESMI
-### PEMERINTAH KOTA CIREBON (DISKOMINFO / BIDANG PERSANDIAN)
+### PEMERINTAH KOTA CIREBON (DKIS KOTA CIREBON / BIDANG PERSANDIAN)
 
 **Versi Sistem:** 5.0.0-PROD / Release V5.0 (Revisi Klien September 2026 - Two-Way Deterministic Encryption & Canonical Routing)  
 **Framework & Engine:** Laravel 13 (PHP 8.3 FPM) + PostgreSQL 16 Alpine + Redis 7 Alpine + Nginx Edge Proxy  
@@ -95,7 +95,7 @@
 ### 1.1 Transformasi Digital & Mandat SPBE Nasional
 Penerapan Sistem Pemerintahan Berbasis Elektronik (SPBE) sebagaimana diamanatkan dalam **Peraturan Presiden Nomor 95 Tahun 2018** mewajibkan seluruh instansi pemerintah daerah untuk mengalihkan tata kelola persuratan, administrasi kepegawaian, dan penandatanganan dokumen kedinasan dari dokumen berbasis kertas fisik menjadi dokumen digital terotentikasi.
 
-Untuk menjamin keaslian identitas penandatangan (*authenticity*), keutuhan isi dokumen (*integrity*), dan kenirsangkalan (*non-repudiation*) dari setiap naskah dinas elektronik (seperti Surat Keputusan Walikota, Surat Perintah Tugas, Nota Dinas, dan Laporan Keuangan), Pemerintah Kota Cirebon melalui **Dinas Komunikasi dan Informatika (Diskominfo) / Bidang Persandian** bertindak sebagai Otoritas Pendaftaran Resmi (*Registration Authority / RA*) yang bermitra langsung dengan **Balai Sertifikasi Elektronik (BSrE) - Badan Siber dan Sandi Negara (BSSN)**. Seluruh Aparatur Sipil Negara (ASN) di lingkungan Pemerintah Kota Cirebon wajib memiliki Sertifikat Elektronik tersertifikasi untuk menandatangani dokumen kedinasan.
+Untuk menjamin keaslian identitas penandatangan (*authenticity*), keutuhan isi dokumen (*integrity*), dan kenirsangkalan (*non-repudiation*) dari setiap naskah dinas elektronik (seperti Surat Keputusan Walikota, Surat Perintah Tugas, Nota Dinas, dan Laporan Keuangan), Pemerintah Kota Cirebon melalui **Dinas Komunikasi, Informatika, dan Statistik Kota Cirebon (DKIS Kota Cirebon) / Bidang Persandian** bertindak sebagai Otoritas Pendaftaran Resmi (*Registration Authority / RA*) yang bermitra langsung dengan **Balai Sertifikasi Elektronik (BSrE) - Badan Siber dan Sandi Negara (BSSN)**. Seluruh Aparatur Sipil Negara (ASN) di lingkungan Pemerintah Kota Cirebon wajib memiliki Sertifikat Elektronik tersertifikasi untuk menandatangani dokumen kedinasan.
 
 ### 1.2 Regulasi Pelindungan Data Pribadi (UU PDP No. 27/2022)
 Penerbitan Sertifikat Elektronik TTE memerlukan pengumpulan dan pemrosesan data identitas kependudukan dan kepegawaian yang sangat sensitif, terutama:
@@ -1049,5 +1049,5 @@ Sistem Monitoring Penerbitan TTE & Pelayanan Email Dinas Resmi Pemerintah Kota C
 
 ---
 
-**Hak Cipta © 2026 Dinas Komunikasi dan Informatika / Bidang Persandian Pemerintah Kota Cirebon.**  
+**Hak Cipta © 2026 Dinas Komunikasi, Informatika, dan Statistik (DKIS Kota Cirebon) / Bidang Persandian.**  
 *Seluruh hak cipta dilindungi undang-undang.*

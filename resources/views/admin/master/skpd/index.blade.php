@@ -94,13 +94,13 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label class="form-label" for="add_kode_skpd">Kode SKPD <span style="color: var(--danger);">*</span></label>
-                    <input type="text" name="kode_skpd" id="add_kode_skpd" class="form-control font-mono" placeholder="Contoh: DISKOMINFO" required>
+                    <input type="text" name="kode_skpd" id="add_kode_skpd" class="form-control font-mono" placeholder="Contoh: DKIS" required>
                     <div class="form-helper">Gunakan huruf kapital tanpa spasi.</div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="add_nama_skpd">Nama Lengkap Instansi / SKPD <span style="color: var(--danger);">*</span></label>
-                    <input type="text" name="nama_skpd" id="add_nama_skpd" class="form-control" placeholder="Contoh: Dinas Komunikasi dan Informatika" required>
+                    <input type="text" name="nama_skpd" id="add_nama_skpd" class="form-control" placeholder="Contoh: Dinas Komunikasi, Informatika, dan Statistik" required>
                 </div>
 
                 <div class="form-group">

@@ -1,7 +1,7 @@
 # SCHEMA.md — Skema Basis Data PostgreSQL 16 Enterprise
 
 **Proyek:** Sistem Dashboard Monitoring TTE & Pelayanan Email Dinas  
-**Instansi:** Dinas Komunikasi dan Informatika / Bidang Persandian  
+**Instansi:** Dinas Komunikasi, Informatika, dan Statistik Kota Cirebon (DKIS Kota Cirebon) / Bidang Persandian  
 **Domain Resmi Email Dinas:** `@cirebonkota.go.id`  
 **Target Skalabilitas:** 100.000 – 1.000.000+ Records (Enterprise Skala Nasional)  
 **Database Engine:** PostgreSQL 16 Alpine + PgBouncer  

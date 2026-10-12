@@ -54,7 +54,7 @@ Basis data pengujian telah diisi dengan akun resmi dan master data unit kerja SK
 
 | Email Akun | Peran (Role) | Kata Sandi Default | Keterangan |
 | :--- | :---: | :---: | :--- |
-| **`admin@cirebonkota.go.id`** | superadmin | `SuperAdmin2026!@#` | Superadmin Persandian Diskominfo |
+| **`admin@cirebonkota.go.id`** | superadmin | `SuperAdmin2026!@#` | Superadmin Persandian DKIS Kota Cirebon |
 | **`ajriajundan@gmail.com`** | superadmin | `Jundan12012005!@#` | **Akun Utama Penguji (Ajri Ajundan, S.Kom)** |
 | **`operator@cirebonkota.go.id`** | superadmin | `Operator!2026#Sandi` | Operator Layanan TTE |
 
@@ -198,7 +198,7 @@ Lakukan pengujian sesuai dengan alur operasional resmi berikut:
    - *Total Pegawai Terdaftar*
    - *Total Pendaftar TTE*
    - *Total Sertifikat Terbit*
-3. **Uji Filter Pencarian:** Masukkan nama instansi (misal: "Kesehatan" atau "Diskominfo") pada kolom pencarian dan klik Cari -> tabel menampilkan hanya SKPD yang sesuai.
+3. **Uji Filter Pencarian:** Masukkan nama instansi (misal: "Kesehatan" atau "DKIS") pada kolom pencarian dan klik Cari -> tabel menampilkan hanya SKPD yang sesuai.
 4. **Uji Filter Kategori:** Pilih kategori capaian (misal: "Sangat Tinggi (≥75%)" atau "Rendah (<25%)") -> tabel memfilter baris data sesuai rentang persentase.
 5. **Uji Pengurutan:** Klik header kolom tabel atau gunakan kontrol sorting untuk mengurutkan data berdasarkan persentase tertinggi/terendah.
 6. Periksa indikator progress bar dan badge kategori warna (Hijau Emerald, Biru Cyan, Amber Kuning, Slate Abu-abu).

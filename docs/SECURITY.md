@@ -1,7 +1,7 @@
 # SECURITY.md — Spesifikasi Arsitektur Keamanan Sistem
 
 **Proyek:** Sistem Dashboard Monitoring TTE & Pelayanan Email Dinas  
-**Instansi:** Dinas Komunikasi dan Informatika / Bidang Persandian  
+**Instansi:** Dinas Komunikasi, Informatika, dan Statistik Kota Cirebon (DKIS Kota Cirebon) / Bidang Persandian  
 **Domain Resmi Email Dinas:** `@cirebonkota.go.id`  
 **Target Skalabilitas:** 100.000 – 1.000.000+ Records (Enterprise Skala Nasional)  
 **Core Stack:** PHP 8.3 / Laravel 13 + PostgreSQL 16 + Redis 7 + Nginx + Docker Compose  
@@ -26,7 +26,7 @@
 Sistem memproses dan mengelola data pribadi kependudukan dan kepegawaian Aparatur Sipil Negara (NIK, NIP, Nomor Telepon, Dokumen SK/Rekomendasi) yang menjadi prasyarat penerbitan sertifikat Tanda Tangan Elektronik (TTE) resmi BSrE. Seluruh arsitektur keamanan dirancang berlandaskan kerangka **Zero-Trust Security** dan **Defense-in-Depth**:
 
 1. **Defense in Depth & Network Segmentation:** Perlindungan berlapis dari Layer 0 (Edge/Network & VPN Gateway) hingga Layer 7 (Tata Kelola & SDLC). Kegagalan pada satu lapisan tidak mengakibatkan kompromi data menyeluruh.
-2. **Zero-Trust Administrative Perimeter:** Rute masuk admin (`/gateway/login` dan `/admin/*`) diisolasi secara mutlak di dalam **VPN Gateway / Intranet Diskominfo**. Publik dari internet luar tidak memiliki visibilitas maupun akses (*Stealth 404 Rejection*).
+2. **Zero-Trust Administrative Perimeter:** Rute masuk admin (`/gateway/login` dan `/admin/*`) diisolasi secara mutlak di dalam **VPN Gateway / Intranet DKIS Kota Cirebon**. Publik dari internet luar tidak memiliki visibilitas maupun akses (*Stealth 404 Rejection*).
 3. **Least Privilege:** Tidak ada komponen kontainer, proses aplikasi, atau pengguna yang memiliki akses lebih dari kebutuhan operasionalnya. Jaringan basis data dan cache terisolasi tanpa akses langsung dari luar (`backend: internal: true`).
 4. **Kepatuhan Regulasi:** Memenuhi ketentuan **UU No. 27 Tahun 2022** tentang Pelindungan Data Pribadi (UU PDP) serta Pedoman Standar Keamanan Siber BSSN untuk sistem persandian pemerintahan.
 5. **Resiliensi Anti-DoS & Memory Safety:** Pencegahan serangan denial-of-service berbasis resource exhaustion melalui rate limiting bertingkat, Asynchronous Audit Logging via Redis Queue, dan Database Cursor Streaming pada ekspor data massal.

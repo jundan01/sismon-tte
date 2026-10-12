@@ -1,6 +1,6 @@
 /**
  * Carbon Flat Interactive Utilities — Vanilla JavaScript (Zero External CDN)
- * Diskominfo Kota Cirebon Monitoring TTE & Email Dinas
+ * Dinas Komunikasi, Informatika, dan Statistik (DKIS) Kota Cirebon Monitoring TTE & Email Dinas
  * Ref: DESIGN.md §8, SECURITY.md §9.1
  */
 

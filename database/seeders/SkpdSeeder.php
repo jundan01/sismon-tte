@@ -13,7 +13,7 @@ class SkpdSeeder extends Seeder
     public function run(): void
     {
         $dataSkpd = [
-            ['kode_skpd' => 'DISKOMINFO',    'nama_skpd' => 'Dinas Komunikasi dan Informatika',                             'total_asn' => 45],
+            ['kode_skpd' => 'DKIS',          'nama_skpd' => 'Dinas Komunikasi, Informatika, dan Statistik',                 'total_asn' => 45],
             ['kode_skpd' => 'BAPPEDA',       'nama_skpd' => 'Badan Perencanaan Pembangunan Daerah',                         'total_asn' => 55],
             ['kode_skpd' => 'BPKAD',         'nama_skpd' => 'Badan Pengelolaan Keuangan dan Aset Daerah',                   'total_asn' => 65],
             ['kode_skpd' => 'BKPSDM',        'nama_skpd' => 'Badan Kepegawaian dan Pengembangan Sumber Daya Manusia',       'total_asn' => 50],
